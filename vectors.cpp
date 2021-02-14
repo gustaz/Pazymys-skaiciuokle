@@ -1,10 +1,9 @@
 #include <iostream>
 #include <iomanip>
-#include <istream>
 #include <string>
 #include <random>
 #include <ctime>
-#include <algorithm>
+#include <vector>
 
 #ifdef _WIN32
 #define WINPAUSE system("pause")
@@ -14,7 +13,7 @@ struct Studentas {
 
 	std::string vardas, pavarde;
 	int n = 0;
-	int* nd = 0;
+	std::vector<int> nd;
 	int egzaminas = 0;
 
 };
@@ -31,12 +30,13 @@ int main()
 		<< std::endl;
 
 	int studentu = 0;
-	Studentas* studentai = new Studentas[studentu + 1];
+	std::vector<Studentas> studentai;
 
 	char pasirinkimas;
 
 	while (true)
 	{
+		studentai.resize(studentu + 1);
 		inputStudent(studentai[studentu]);
 
 		studentu++;
@@ -47,16 +47,7 @@ int main()
 
 		if (tolower(pasirinkimas) == 'n')
 			break;
-		else
-		{
-			Studentas* studentai_didesnis = new Studentas[studentu + 1];
-
-			for (int i = 0; i < studentu; i++)
-				studentai_didesnis[i] = studentai[i];
-
-			delete[] studentai;
-			studentai = studentai_didesnis;
-		}			
+		
 	}
 	
 	std::cout << "Dabar yra suteikiama galimybe pasirinkti isvedima."
@@ -107,14 +98,14 @@ int main()
 
 		for (int i = 0; i < studentu; i++)
 		{
-			std::sort(studentai[i].nd, studentai[i].nd + studentai[i].n);
+			std::sort(studentai[i].nd.begin(), studentai[i].nd.end());
 
 			double median = 0;
 
 			if (studentai[i].n % 2 == 1)
 				median = studentai[i].nd[studentai[i].n / 2];
 
-			else median = (studentai[i].nd[studentai[i].n / 2] + studentai[i].nd[studentai[i].n / 2 - 1]) / 2;
+			else median = ((double)studentai[i].nd[studentai[i].n / 2] + (double)studentai[i].nd[studentai[i].n / 2 - 1]) / 2;
 
 			std::cout << std::left
 				<< std::setw(20) << studentai[i].pavarde
@@ -124,17 +115,16 @@ int main()
 		}
 
 	}
-	delete[] studentai;
 	WINPAUSE;
 }
 
 void inputStudent(Studentas& studentai) 
 {
 	std::string vardas, pavarde;
-	int n = 0, egzaminas{};
+	int n = 0, egzaminas = 0;
 	bool looped = false;
 
-	int* nd = new int[n+1];
+	std::vector<int> nd;
 	char pasirinkimas;
 
 	std::cout << "Iveskite studento varda: ";
@@ -156,9 +146,6 @@ void inputStudent(Studentas& studentai)
 		std::cin >> n;
 		checkInput(n, false);
 
-		delete[] nd;
-		nd = new int[n];
-
 		std::cout << "Dabar yra suteikiama galimybe pasirinkti ivedima."
 			<< " Duomenys vedami arba ranka, arba generuojami atsitiktinai."
 				<< std::endl
@@ -172,7 +159,7 @@ void inputStudent(Studentas& studentai)
 			std::cout << "Pasirinkta duomenis generuoti atsitiktine tvarka.";
 
 			for (int i = 0; i < n; i++)
-				nd[i] = rand() % 10 + 1;
+				nd.push_back(rand() % 10 + 1);
 
 			egzaminas = rand() % 10 + 1;
 
@@ -193,9 +180,11 @@ void inputStudent(Studentas& studentai)
 
 			for (int i = 0; i < n; i++)
 			{
+				int ivestis;
 				std::cout << "Iveskite " << i + 1 << "-aji pazymi: ";
-				std::cin >> nd[i];
-				checkInput(nd[i], true);
+				std::cin >> ivestis;
+				checkInput(ivestis, true);
+				nd.push_back(ivestis);
 			}
 
 			std::cout << "Iveskite egzamino pazymi: ";
@@ -218,9 +207,11 @@ void inputStudent(Studentas& studentai)
 
 		while (true)
 		{
+			int ivestis;
 			std::cout << "Iveskite " << n + 1 << "-aji pazymi: ";
-			std::cin >> nd[n];
-			checkInput(nd[n], true);
+			std::cin >> ivestis;
+			checkInput(ivestis, true);
+			nd.push_back(ivestis);
 
 			if (nd[n] == 0 && n > 0)
 			{
@@ -235,20 +226,8 @@ void inputStudent(Studentas& studentai)
 					<< std::endl;
 
 			else
-			{
 				n++;
-
-				int* nd_didesnis = new int[n + 1];
-
-				for (int i = 0; i < n; i++)
-					nd_didesnis[i] = nd[i];
-
-				delete[] nd;
-				nd = nd_didesnis;
-			}
-
 		}
-
 	}
 
 	studentai.vardas = vardas;
@@ -263,6 +242,8 @@ void checkInput(int &skaicius, bool limited) {
 
 	while (std::cin.fail() || skaicius < 0 || skaicius > 10) 
 	{
+
+
 		if(std::cin.fail()) 
 			std::cout 
 				<< "Ivedete reiksme, netenkinancia salygos! (Gal netycia vietoje skaiciaus ivedete raide?)" 
@@ -270,12 +251,17 @@ void checkInput(int &skaicius, bool limited) {
 
 		else if (skaicius <= 0)
 			std::cout
-				<< "Ivedete reiksme, netenkinancia salygos! (Skaicius negali buti mazesne uz nuli!)"
+				<< "Ivedete reiksme, netenkinancia salygos! (Skaicius negali buti mazesne uz 0!)"
 					<< std::endl;
-		else if(limited && skaicius > 10)
+		else if (skaicius > 10)
+		{
+			if (!limited) break;
+
 			std::cout
 				<< "Ivedete reiksme, netenkinancia salygos! (Skaicius negali buti didesnis uz 10!)"
 					<< std::endl;
+		}
+
 
 		std::cin.clear();
 		std::cin.ignore(256, '\n');
