@@ -1,4 +1,4 @@
-# Įrėmintas paveikslėlis
+# Pažymių skaičiuoklė
 
 ## Funkcijos
 * Leidžia vartotojui įvesti studento vardą, pavardę;
