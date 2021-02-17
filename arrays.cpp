@@ -263,6 +263,8 @@ void checkInput(int &skaicius, bool limited) {
 
 	while (std::cin.fail() || skaicius < 0 || skaicius > 10) 
 	{
+
+
 		if(std::cin.fail()) 
 			std::cout 
 				<< "Ivedete reiksme, netenkinancia salygos! (Gal netycia vietoje skaiciaus ivedete raide?)" 
@@ -270,12 +272,17 @@ void checkInput(int &skaicius, bool limited) {
 
 		else if (skaicius <= 0)
 			std::cout
-				<< "Ivedete reiksme, netenkinancia salygos! (Skaicius negali buti mazesne uz nuli!)"
+				<< "Ivedete reiksme, netenkinancia salygos! (Skaicius negali buti mazesne uz 0!)"
 					<< std::endl;
-		else if(limited && skaicius > 10)
+		else if (skaicius > 10)
+		{
+			if (!limited) break;
+
 			std::cout
 				<< "Ivedete reiksme, netenkinancia salygos! (Skaicius negali buti didesnis uz 10!)"
 					<< std::endl;
+		}
+
 
 		std::cin.clear();
 		std::cin.ignore(256, '\n');
