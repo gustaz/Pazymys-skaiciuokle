@@ -82,7 +82,7 @@ int main()
 			std::cout << std::left
 				<< std::setw(20) << studentai[i].pavarde
 				<< std::setw(15) << studentai[i].vardas
-				<< std::setw(15) << std::setprecision(2) << avg
+				<< std::setw(15) << std::fixed << std::setprecision(2) << avg
 				<< std::endl;
 
 		}
@@ -108,10 +108,11 @@ int main()
 
 			else median = ((double)studentai[i].nd[studentai[i].n / 2] + (double)studentai[i].nd[studentai[i].n / 2 - 1]) / 2;
 
+			double final = median * 0.4 + studentai[i].egzaminas * 0.6;
 			std::cout << std::left
 				<< std::setw(20) << studentai[i].pavarde
 				<< std::setw(15) << studentai[i].vardas
-				<< std::setw(15) << std::setprecision(2) << median
+				<< std::setw(15) << std::fixed << std::setprecision(2) << final
 				<< std::endl;
 		}
 
