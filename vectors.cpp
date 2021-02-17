@@ -4,6 +4,7 @@
 #include <random>
 #include <ctime>
 #include <vector>
+#include <algorithm>
 
 #ifdef _WIN32
 #define WINPAUSE system("pause")
