@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include <iomanip>
 #include <string>
 #include <random>
@@ -13,13 +15,21 @@
 struct Studentas {
 
 	std::string vardas, pavarde;
-	int n = 0;
 	std::vector<int> nd;
 	int egzaminas = 0;
 
 };
 
-void inputStudent(Studentas& studentai);
+struct palyginimas
+{
+	inline bool operator() (const Studentas& struct1, const Studentas& struct2)
+	{
+		return (struct1.pavarde.compare(struct2.pavarde)) < 0;
+	}
+};
+
+void readFromFile(std::vector<Studentas>& studentai);
+void inputStudent(std::vector<Studentas>& studentai);
 void checkInput(int& skaicius, bool limited);
 void checkInput(char& ivestis);
 
@@ -30,27 +40,49 @@ int main()
 	std::cout << "Atsakydami i programos uzduodamus klausimus rasykite raides T (-taip) arba N (-ne)."
 		<< std::endl;
 
-	int studentu = 0;
 	std::vector<Studentas> studentai;
-
 	char pasirinkimas;
 
-	while (true)
-	{
-		studentai.resize(studentu + 1);
-		inputStudent(studentai[studentu]);
+	std::cout << "Ar norite nuskaityti duomenis is failo? (T/N): ";
+	std::cin >> pasirinkimas;
+	checkInput(pasirinkimas);
 
-		studentu++;
+	bool nuskaitytiDuomenys = false;
+	bool skaitytiToliau = false;
+
+	if(tolower(pasirinkimas) == 't')
+	{
+		readFromFile(studentai);
+		nuskaitytiDuomenys = true;
+		std::cout << "Failo duomenys nuskaityti. "
+			<< std::endl;
+	}
+	if (nuskaitytiDuomenys)
+	{
+		std::cout << "Ar norite duomenis taip pat ivesti ranka? (T/N): ";
+		std::cin >> pasirinkimas;
+		checkInput(pasirinkimas);
+
+		if (tolower(pasirinkimas) == 't')
+			skaitytiToliau = true;
+	}
+	else
+		std::cout << "Nepasirinkta duomenis skaityti is failo. Pereinama prie ivedimo rankiniu budu. "
+			<< std::endl;
+
+	while (skaitytiToliau || !nuskaitytiDuomenys)
+	{
+		std::cin.ignore();
+		inputStudent(studentai);		
 
 		std::cout << "Ar norite prideti dar viena studenta? (T/N): ";
 		std::cin >> pasirinkimas;
-		std::cin.ignore();
+		
+		checkInput(pasirinkimas);
 
 		if (tolower(pasirinkimas) == 'n')
 			break;
-		
 	}
-	
 	std::cout << "Dabar yra suteikiama galimybe pasirinkti isvedima."
 		<< std::endl;
 
@@ -58,6 +90,8 @@ int main()
 		<< "Jei pasirinksite ne, bus rodoma mediana. (T/N): ";
 	std::cin >> pasirinkimas;
 	checkInput(pasirinkimas);
+
+	std::sort(studentai.begin(), studentai.end(), palyginimas());
 
 	if (tolower(pasirinkimas) == 't')
 	{
@@ -69,14 +103,14 @@ int main()
 			<< std::string(65, '-')
 			<< std::endl;
 
-		for (int i = 0; i < studentu; i++)
+		for (int i = 0; i < studentai.size(); i++)
 		{
 			double avg = 0;
 
-			for (int j = 0; j < studentai[i].n; j++)
+			for (int j = 0; j < studentai[i].nd.size(); j++)
 				avg += studentai[i].nd[j];
 
-			avg /= studentai[i].n;
+			avg = avg / studentai[i].nd.size();
 			avg = 0.4 * avg + 0.6 * studentai[i].egzaminas;
 			
 			std::cout << std::left
@@ -84,7 +118,6 @@ int main()
 				<< std::setw(15) << studentai[i].vardas
 				<< std::setw(15) << std::fixed << std::setprecision(2) << avg
 				<< std::endl;
-
 		}
 	}
 	else
@@ -97,16 +130,16 @@ int main()
 			<< std::string(65, '-')
 			<< std::endl;
 
-		for (int i = 0; i < studentu; i++)
+		for (int i = 0; i < studentai.size(); i++)
 		{
 			std::sort(studentai[i].nd.begin(), studentai[i].nd.end());
 
 			double median = 0;
 
-			if (studentai[i].n % 2 == 1)
-				median = studentai[i].nd[studentai[i].n / 2];
+			if (studentai[i].nd.size() % 2 == 1)
+				median = studentai[i].nd[studentai[i].nd.size() / 2];
 
-			else median = ((double)studentai[i].nd[studentai[i].n / 2] + (double)studentai[i].nd[studentai[i].n / 2 - 1]) / 2;
+			else median = ((double)studentai[i].nd[studentai[i].nd.size() / 2] + (double)studentai[i].nd[studentai[i].nd.size() / 2 - 1]) / 2;
 
 			double final = median * 0.4 + studentai[i].egzaminas * 0.6;
 			std::cout << std::left
@@ -120,22 +153,95 @@ int main()
 	WINPAUSE;
 }
 
-void inputStudent(Studentas& studentai) 
+void readFromFile(std::vector<Studentas>& studentai)
 {
-	std::string vardas, pavarde;
-	int n = 0, egzaminas = 0;
-	bool looped = false;
+	Studentas student;
 
-	std::vector<int> nd;
+	std::ifstream input;
+
+	int pasirinkimas;
+
+	std::cout << "Pasirinkite, kuri faila norite skaityti: "
+		<< std::endl << "(1) 10 000 studentu"
+		<< std::endl << "(2) 100 000 studentu"
+		<< std::endl << "(3) 1 000 000 studentu"
+		<< std::endl << "(4) Rikiavimo demonstracija"
+		<< std::endl;
+
+	std::cout << "Jusu pasirinkimas: ";
+	std::cin >> pasirinkimas;
+
+	bool teisingas = false;
+
+	while (true)
+	{
+		switch (pasirinkimas)
+		{
+		case 1:
+			input.open("studentai10000.txt");
+			teisingas = true;
+			break;
+		case 2:
+			input.open("studentai100000.txt");
+			teisingas = true;
+			break;
+		case 3:
+			input.open("studentai1000000.txt");
+			teisingas = true;
+			break;
+		case 4:
+			input.open("sortdemo.txt");
+			teisingas = true;
+			break;
+		default:
+			{
+			std::cout << "Ivedete klaidinga reiksme! Pasirinkite skaiciu nuo 1 iki 4: ";
+			std::cin >> pasirinkimas;
+			continue;
+			}
+		}
+		break;
+	}
+
+
+	input.ignore(256, '\n');
+
+	while (!input.eof())
+	{
+		std::string line, vardas, pavarde;
+		
+		input >> vardas >> pavarde;
+		getline(input, line);
+
+		std::stringstream stream(line);
+		std::vector<int> values;
+
+		int n;
+		while (stream >> n)
+				values.push_back(n);
+
+		values.pop_back();
+		student.egzaminas = n;
+		student.nd = values;
+		student.vardas = vardas;
+		student.pavarde = pavarde;
+		studentai.push_back(student);
+	}
+}
+
+void inputStudent(std::vector<Studentas>& studentai) 
+{
+	Studentas stud;	
 	char pasirinkimas;
+	int n;
 
 	std::cout << "Iveskite studento varda: ";
-	getline(std::cin, vardas);
+	getline(std::cin, stud.vardas);
 
 	std::cout << "Iveskite studento pavarde: ";
-	getline(std::cin, pavarde);
+	getline(std::cin, stud.pavarde);
 
-	std::cout << "Pradedami ivesti studento " << vardas << " " << pavarde << " duomenys."
+	std::cout << "Pradedami ivesti studento " << stud.vardas << " " << stud.pavarde << " duomenys."
 		<< std::endl
 			<< "Ar zinomas tikslus atliktu namu darbu skaicius? (T/N): ";
 
@@ -161,18 +267,18 @@ void inputStudent(Studentas& studentai)
 			std::cout << "Pasirinkta duomenis generuoti atsitiktine tvarka.";
 
 			for (int i = 0; i < n; i++)
-				nd.push_back(rand() % 10 + 1);
+				stud.nd.push_back(rand() % 10 + 1);
 
-			egzaminas = rand() % 10 + 1;
+			stud.egzaminas = rand() % 10 + 1;
 
 			std::cout << std::endl
 				<< "Gauti pazymiai: ";
-			for (int i = 0; i < n; i++)
-				std::cout << nd[i] << " ";
+			for (int i = 0; i < stud.nd.size(); i++)
+				std::cout << stud.nd[i] << " ";
 
 			std::cout << std::endl
 				<< "Gautas egzamino ivertinimas: "
-					<< egzaminas
+					<< stud.egzaminas
 						<< std::endl;
 		}
 		else if (tolower(pasirinkimas) == 'n')
@@ -186,12 +292,11 @@ void inputStudent(Studentas& studentai)
 				std::cout << "Iveskite " << i + 1 << "-aji pazymi: ";
 				std::cin >> ivestis;
 				checkInput(ivestis, true);
-				nd.push_back(ivestis);
+				stud.nd.push_back(ivestis);
 			}
-
 			std::cout << "Iveskite egzamino pazymi: ";
-			std::cin >> egzaminas;
-			checkInput(egzaminas, true);
+			std::cin >> stud.egzaminas;
+			checkInput(stud.egzaminas, true);
 
 			std::cout << "Baigtas duomenu ivedimas." 
 				<< std::endl;
@@ -199,7 +304,6 @@ void inputStudent(Studentas& studentai)
 	}
 	else if (tolower(pasirinkimas) == 'n')
 	{
-
 		std::cout << "Kadangi studento namu darbu skaicius nezinomas,"
 			<< " atliekama ivestis rankiniu budu."
 			<< std::endl;
@@ -210,42 +314,31 @@ void inputStudent(Studentas& studentai)
 		while (true)
 		{
 			int ivestis;
-			std::cout << "Iveskite " << n + 1 << "-aji pazymi: ";
+			std::cout << "Iveskite " << stud.nd.size() + 1 << "-aji pazymi: ";
 			std::cin >> ivestis;
 			checkInput(ivestis, true);
-			nd.push_back(ivestis);
 
-			if (nd[n] == 0 && n > 0)
+			if (ivestis == 0 && stud.nd.size() > 0)
 			{
 				std::cout << "Iveskite egzamino pazymi: ";
-				std::cin >> egzaminas;
-				checkInput(egzaminas, true);
+				std::cin >> stud.egzaminas;
+				checkInput(stud.egzaminas, true);
 				break;
 			}
-				
-			else if (nd[n] == 0 && n == 0)
+			else if (ivestis == 0 && stud.nd.size() == 0)
 				std::cout << "Studentas turi tureti bent viena pazymi!"
 					<< std::endl;
 
-			else
-				n++;
+			stud.nd.push_back(ivestis);
 		}
 	}
-
-	studentai.vardas = vardas;
-	studentai.pavarde = pavarde;
-	studentai.n = n;
-	studentai.nd = nd;
-	studentai.egzaminas = egzaminas;
-		
+	studentai.push_back(stud);	
 }
 
-void checkInput(int &skaicius, bool limited) {
-
+void checkInput(int &skaicius, bool limited) 
+{
 	while (std::cin.fail() || skaicius < 0 || skaicius > 10) 
 	{
-
-
 		if(std::cin.fail()) 
 			std::cout 
 				<< "Ivedete reiksme, netenkinancia salygos! (Gal netycia vietoje skaiciaus ivedete raide?)" 
@@ -263,8 +356,6 @@ void checkInput(int &skaicius, bool limited) {
 				<< "Ivedete reiksme, netenkinancia salygos! (Skaicius negali buti didesnis uz 10!)"
 					<< std::endl;
 		}
-
-
 		std::cin.clear();
 		std::cin.ignore(256, '\n');
 		std::cout << "Pakartokite ivedima: ";
@@ -272,8 +363,8 @@ void checkInput(int &skaicius, bool limited) {
 	}
 }
 
-void checkInput(char& ivestis) {
-
+void checkInput(char& ivestis) 
+{
 	while (std::cin.fail() || tolower(ivestis) != 't' && tolower(ivestis) != 'n')
 	{
 		if (std::cin.fail())
