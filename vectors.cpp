@@ -162,16 +162,15 @@ void readFromFile(std::vector<Studentas>& studentai)
 	int pasirinkimas;
 
 	std::cout << "Pasirinkite, kuri faila norite skaityti: "
-		<< std::endl << "(1) 10 000 studentu"
-		<< std::endl << "(2) 100 000 studentu"
-		<< std::endl << "(3) 1 000 000 studentu"
-		<< std::endl << "(4) Rikiavimo demonstracija"
+		<< std::endl << "(1) studentai10000.txt"
+		<< std::endl << "(2) studentai100000.txt"
+		<< std::endl << "(3) studentai1000000.txt"
+		<< std::endl << "(4) sortdemo.txt"
+		<< std::endl << "(5) kursiokai.txt"
 		<< std::endl;
 
 	std::cout << "Jusu pasirinkimas: ";
 	std::cin >> pasirinkimas;
-
-	bool teisingas = false;
 
 	while (true)
 	{
@@ -179,19 +178,18 @@ void readFromFile(std::vector<Studentas>& studentai)
 		{
 		case 1:
 			input.open("studentai10000.txt");
-			teisingas = true;
 			break;
 		case 2:
 			input.open("studentai100000.txt");
-			teisingas = true;
 			break;
 		case 3:
 			input.open("studentai1000000.txt");
-			teisingas = true;
 			break;
 		case 4:
 			input.open("sortdemo.txt");
-			teisingas = true;
+			break;
+		case 5:
+			input.open("kursiokai.txt");
 			break;
 		default:
 			{
@@ -227,6 +225,7 @@ void readFromFile(std::vector<Studentas>& studentai)
 		student.pavarde = pavarde;
 		studentai.push_back(student);
 	}
+	input.close();
 }
 
 void inputStudent(std::vector<Studentas>& studentai) 
