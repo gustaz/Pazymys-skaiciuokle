@@ -18,10 +18,11 @@ ANTRASIS BŪDAS
 ## Programos naudojimas
 Naudojimas
 1. Paleidus vykdomąjį failą atidaromas komandinės eilutės langas ir vartotojas gali naviguoti laikydamasis programos numatytos eigos.
-2. Įvedus vardą, pavardę, duodama pasirinkti pažymių įvedimo būdą (generacija, įvedimas rankiniu būdu).
-3. Suvedus visus duomenis vartotojo paklausiama, ar jis nori pridėti dar vieną studentą. Jei taip, kartojami žingsniai 1-3.
-4. Jei ne, paklausiama, ar vartotojas nori matyti vidurkį, ar medianą.
-5. Pagal atitinkamą vartotojo pasirinkimą parodoma lentelė su įvestų studentų duomenimis.
+2. Leidžiama pasirinkti, ar vartotojas nori įvedimą daryti iš failo. 
+3. Baigus ar nepasirinkus įvedimą iš failo taip pat galima pasirinkti ir įvedimą rankiniui būdu. Įvedus vardą, pavardę, duodama pasirinkti pažymių įvedimo būdą (generacija, įvedimas rankiniu būdu).
+4. Suvedus visus duomenis vartotojo paklausiama, ar jis nori pridėti dar vieną studentą. Jei taip, kartojami žingsniai 1-3.
+5. Jei ne, paklausiama, ar vartotojas nori matyti vidurkį, ar medianą.
+6. Pagal atitinkamą vartotojo pasirinkimą parodoma lentelė su įvestų studentų duomenimis.
 	
 ## Versijos
 * [v0.1](https://github.com/gustaz/Pazymys-skaiciuokle/releases/tag/v0.1) Įgyvendintas esminis funkcionalumas
