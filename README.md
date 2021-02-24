@@ -10,8 +10,6 @@
 PIRMASIS BŪDAS
 1. Parsisiųsti .exe vykdomąjį failą ir, rekomenduojama tik patikrinus, jog jo MD5 hash atitinka, paleisti.
 
-**MD5 hash: 1C196C0478625EF340396AA18CF0AC22**
-
 ANTRASIS BŪDAS
 1. Parsisiųsti norimą programos versijos kodą iš releases;
 2. Kodą sukompiliuoti per komandinę eilutę arba pasirinktą IDE;
@@ -27,3 +25,4 @@ Naudojimas
 	
 ## Versijos
 * [v0.1](https://github.com/gustaz/Pazymys-skaiciuokle/releases/tag/v0.1) Įgyvendintas esminis funkcionalumas
+* [v0.2](https://github.com/gustaz/Pazymys-skaiciuokle/releases/tag/v0.2) Pridėta galimybė duomenis skaityti iš failo, duomenis rikiuoti
