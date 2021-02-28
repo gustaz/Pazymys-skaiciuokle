@@ -13,6 +13,10 @@ PIRMASIS BŪDAS
 ANTRASIS BŪDAS
 1. Parsisiųsti norimą programos versijos kodą iš releases;
 2. Kodą sukompiliuoti per komandinę eilutę arba pasirinktą IDE;
+```sh
+g++ vectors.cpp functions.cpp -o skaiciuokle
+.\skaiciuokle
+```
 3. Gautą vykdomąjį failą paleisti.
 	
 ## Programos naudojimas
