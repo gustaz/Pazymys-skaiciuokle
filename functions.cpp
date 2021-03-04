@@ -1,6 +1,7 @@
 #include "declarations.h"
 
 std::mt19937::result_type seed = time(0);
+
 auto gradeGen = std::bind(std::uniform_int_distribution<int>(1, 10),
 	std::mt19937(seed));
 
@@ -13,11 +14,13 @@ void readFromFile(std::vector<Studentas>& studentai)
 	int pasirinkimas;
 
 	std::cout << "Pasirinkite, kuri faila norite skaityti: "
-		<< std::endl << "(1) studentai10000.txt"
-		<< std::endl << "(2) studentai100000.txt"
-		<< std::endl << "(3) studentai1000000.txt"
-		<< std::endl << "(4) sortdemo.txt"
-		<< std::endl << "(5) kursiokai.txt"
+		<< std::endl << "(1) studentai1000.txt"
+		<< std::endl << "(2) studentai10000.txt"
+		<< std::endl << "(3) studentai100000.txt"
+		<< std::endl << "(4) studentai1000000.txt"
+		<< std::endl << "(5) studentai10000000.txt"
+		<< std::endl << "(6) sortdemo.txt"
+		<< std::endl << "(7) kursiokai.txt"
 		<< std::endl;
 
 	std::cout << "Jusu pasirinkimas: ";
@@ -30,23 +33,29 @@ void readFromFile(std::vector<Studentas>& studentai)
 			switch (pasirinkimas)
 			{
 			case 1:
-				input.open("studentai10000.txt");
+				input.open("studentai1000.txt");
 				break;
 			case 2:
-				input.open("studentai100000.txt");
+				input.open("studentai10000.txt");
 				break;
 			case 3:
-				input.open("studentai1000000.txt");
+				input.open("studentai100000.txt");
 				break;
 			case 4:
-				input.open("sortdemo.txt");
+				input.open("studentai1000000.txt");
 				break;
 			case 5:
+				input.open("studentai10000000.txt");
+				break;
+			case 6:
+				input.open("sortdemo.txt");
+				break;
+			case 7:
 				input.open("kursiokai.txt");
 				break;
 			default:
 			{
-				std::cout << "Ivedete klaidinga reiksme! Pasirinkite skaiciu nuo 1 iki 4: ";
+				std::cout << "Ivedete klaidinga reiksme! Pasirinkite skaiciu nuo 1 iki 7: ";
 				std::cin >> pasirinkimas;
 				continue;
 			}
@@ -54,39 +63,59 @@ void readFromFile(std::vector<Studentas>& studentai)
 			break;
 		}
 		if (!input.good())
-			throw - 1;
+			throw 1;
 	}
 	catch (int err)
 	{
-		std::cout << "Pasirinktas failas nerastas!";
+		std::cout << "Pasirinktas failas nerastas! Programos veikla uzbaigiama.";
 		exit(1);
 	}
 
-
+	clockStart = std::chrono::steady_clock::now();
 	input.ignore(256, '\n');
 
-	while (!input.eof())
+	try
 	{
-		std::string line, vardas, pavarde;
+		while (!input.eof())
+		{
 
-		input >> vardas >> pavarde;
-		getline(input, line);
+			std::string line, vardas, pavarde;
 
-		std::stringstream stream(line);
-		std::vector<int> values;
+			input >> vardas >> pavarde;
+			getline(input, line);
 
-		int n;
-		while (stream >> n)
-			values.push_back(n);
+			std::stringstream stream(line);
+			std::vector<int> values;
 
-		values.pop_back();
-		student.egzaminas = n;
-		student.nd = values;
-		student.vardas = vardas;
-		student.pavarde = pavarde;
-		studentai.push_back(student);
+			int n;
+			while (stream >> n)
+			{
+				values.push_back(n);
+			}
+
+			if (line.length() != 0)
+			{
+				values.pop_back();
+				student.egzaminas = n;
+				student.nd = values;
+				student.vardas = vardas;
+				student.pavarde = pavarde;
+				studentai.push_back(student);
+			}
+		}
 	}
+	catch (std::bad_alloc& exception)
+	{
+		input.ignore(256, '\n');
+		std::cout << "Programa aptiko klaidu faile! Tolimesnis sklandus veikimas negarantuojamas."
+			<< std::endl;
+	}
+		
 	input.close();
+
+	std::cout << "Failo duomenys nuskaityti. "
+		<< std::endl;
+	std::cout << "Nuskaitymas uztruko: " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - clockStart).count() << " ms" << std::endl;
 }
 
 void inputStudent(std::vector<Studentas>& studentai)
@@ -195,6 +224,105 @@ void inputStudent(std::vector<Studentas>& studentai)
 	studentai.push_back(stud);
 }
 
+void askForGeneration() 
+{
+	char pasirinkimas;
+
+	std::ofstream output;
+
+	std::cout << "Ar norite generuoti 1 000 studentu faila? (T/N): ";
+	std::cin >> pasirinkimas;
+	checkInput(pasirinkimas);
+	if (tolower(pasirinkimas) == 't')
+	{
+		generateFile(1000, output);
+	}
+
+	std::cout << "Ar norite generuoti 10 000 studentu faila? (T/N): ";
+	std::cin >> pasirinkimas;
+	checkInput(pasirinkimas);
+	if (tolower(pasirinkimas) == 't')
+	{
+		generateFile(10000, output);
+	}
+
+	std::cout << "Ar norite generuoti 100 000 studentu faila? (T/N): ";
+	std::cin >> pasirinkimas;
+	checkInput(pasirinkimas);
+	if (tolower(pasirinkimas) == 't')
+	{
+		generateFile(100000, output);
+	}
+
+	std::cout << "Ar norite generuoti 1 000 000 studentu faila? (T/N): ";
+	std::cin >> pasirinkimas;
+	checkInput(pasirinkimas);
+	if (tolower(pasirinkimas) == 't')
+	{
+		generateFile(1000000, output);
+	}
+
+	std::cout << "Ar norite generuoti 10 000 000 studentu faila? (T/N): ";
+	std::cin >> pasirinkimas;
+	checkInput(pasirinkimas);
+	if (tolower(pasirinkimas) == 't')
+	{
+		generateFile(10000000, output);
+	}
+}
+
+void generateFile(int numberOfStudents, std::ofstream& output)
+{
+	std::string fileName = "studentai" + std::to_string(numberOfStudents) + ".txt";
+	output.open(fileName);
+	output << std::left << std::setw(20) << "Vardas" << std::setw(20) << "Pavarde" ;
+	
+
+	int noOfHomework = 20;
+	std::cout << "Pasirinkite, kiek kiekvienas studentas turejo atsiskaityti namu darbu: ";
+	std::cin >> noOfHomework;
+	checkInput(noOfHomework, false);
+
+	clockStart = std::chrono::steady_clock::now();
+
+	for (int i = 0; i < noOfHomework; i++)
+	{
+		output << std::setw(7) << "ND" + std::to_string(i + 1);
+	}
+	output << std::setw(7) << "Egz." << std::endl;
+
+	for (int i = 0; i < numberOfStudents; i++)
+	{
+		int grades = gradeGen();
+		output << std::setw(20) << "Vardas" + std::to_string(i + 1) << std::setw(20) << "Pavarde" + std::to_string(i + 1);
+
+		for (int i = 0; i < noOfHomework; i++)
+		{
+			output << std::setw(7) << gradeGen();
+		}
+		output << std::setw(7) << gradeGen();
+		if(i != numberOfStudents - 1) output << std::endl;
+	}
+	output.close();
+	std::cout << "Generavimas truko: " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - clockStart).count() << " ms" << std::endl;
+}
+
+double findMedian(std::vector<int> grades, int n)
+{
+	if (n % 2 == 0) {
+
+		nth_element(grades.begin(), grades.begin() + n / 2, grades.end());
+
+		nth_element(grades.begin(), grades.begin() + (n - 1) / 2, grades.end());
+
+		return (double)(grades[(n - 1) / 2] + grades[n / 2]) / 2.0;
+	}
+	else {
+		nth_element(grades.begin(), grades.begin() + n / 2, grades.end());
+		return (double)grades[n / 2];
+	}
+}
+
 void checkInput(int& skaicius, bool limited)
 {
 	while (std::cin.fail() || skaicius < 0 || skaicius > 10)
@@ -242,3 +370,4 @@ void checkInput(char& ivestis)
 		std::cin >> ivestis;
 	}
 }
+
