@@ -1,6 +1,9 @@
 #include "declarations.h"
 
-std::mt19937::result_type seed = time(0);
+auto nowForSeed = std::chrono::high_resolution_clock::now();
+auto timeInMSForSeed = std::chrono::duration_cast<std::chrono::milliseconds>(nowForSeed.time_since_epoch()).count();
+
+std::mt19937::result_type seed = timeInMSForSeed;
 
 auto gradeGen = std::bind(std::uniform_int_distribution<int>(1, 10),
 	std::mt19937(seed));
@@ -33,25 +36,25 @@ void readFromFile(std::vector<Studentas>& studentai)
 			switch (pasirinkimas)
 			{
 			case 1:
-				input.open("studentai1000.txt");
+				input.open("data/input/studentai1000.txt");
 				break;
 			case 2:
-				input.open("studentai10000.txt");
+				input.open("data/input/studentai10000.txt");
 				break;
 			case 3:
-				input.open("studentai100000.txt");
+				input.open("data/input/studentai100000.txt");
 				break;
 			case 4:
-				input.open("studentai1000000.txt");
+				input.open("data/input/studentai1000000.txt");
 				break;
 			case 5:
-				input.open("studentai10000000.txt");
+				input.open("data/input/studentai10000000.txt");
 				break;
 			case 6:
-				input.open("sortdemo.txt");
+				input.open("data/input/sortdemo.txt");
 				break;
 			case 7:
-				input.open("kursiokai.txt");
+				input.open("data0/input/kursiokai.txt");
 				break;
 			default:
 			{
@@ -273,8 +276,11 @@ void askForGeneration()
 
 void generateFile(int numberOfStudents, std::ofstream& output)
 {
+	if (mkdir("data") != 0);
+	if (mkdir("data/input") != 0);
+
 	std::string fileName = "studentai" + std::to_string(numberOfStudents) + ".txt";
-	output.open(fileName);
+	output.open("data/input/" + fileName);
 	output << std::left << std::setw(20) << "Vardas" << std::setw(20) << "Pavarde" ;
 	
 

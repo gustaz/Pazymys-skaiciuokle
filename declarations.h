@@ -7,10 +7,11 @@
 #include <string>
 #include <functional>
 #include <random>
-#include <ctime>
 #include <vector>
 #include <algorithm>
 #include <chrono>
+#include <io.h>
+#include <direct.h>
 
 #ifdef _WIN32
 #define WINPAUSE system("pause")

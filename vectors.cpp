@@ -62,6 +62,8 @@ int main()
 			break;
 	}
 
+	std::cout << "Vykdomas galutiniu ivertinimu skaiciavimas." << std::endl;
+	clockStart = std::chrono::steady_clock::now();
 	for (int i = 0; i < studentai.size(); i++)
 	{
 		double avg = 0;
@@ -74,6 +76,7 @@ int main()
 
 		studentai[i].galutinisMed = findMedian(studentai[i].nd, studentai[i].nd.size()) * 0.4 + studentai[i].egzaminas * 0.6;
 	}
+	std::cout << "Galutiniu ivertinimu skaiciavimas truko: " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - clockStart).count() << " ms" << std::endl;
 
 	bool outputDone = false;
 	std::cout << "Dabar yra suteikiama galimybe pasirinkti isvedima."
@@ -95,6 +98,9 @@ int main()
 			<< std::endl << "Ar norite, jog rezultatas isvedamas butu pagal galutini ivertinima? "
 			<< "Pasirinkus ne, bus skaiciuojama pagal mediana. (T/N): ";
 
+		if (mkdir("data") != 0);
+		if (mkdir("data/output") != 0);
+
 		std::cin >> pasirinkimas;
 		checkInput(pasirinkimas);
 		if (tolower(pasirinkimas) == 't')
@@ -112,7 +118,7 @@ int main()
 			clockStart = std::chrono::steady_clock::now();
 			std::ofstream output;
 
-			output.open("kietiakai.txt");
+			output.open("data/output/kietiakai.txt");
 
 			output << std::left
 				<< std::setw(20) << "Pavarde"
@@ -132,7 +138,7 @@ int main()
 
 			output.close();
 
-			output.open("vargsiukai.txt");
+			output.open("data/output/vargsiukai.txt");
 
 			output << std::left
 				<< std::setw(20) << "Pavarde"
@@ -167,7 +173,7 @@ int main()
 			clockStart = std::chrono::steady_clock::now();
 			std::ofstream output;
 
-			output.open("kietiakai.txt");
+			output.open("data/output/kietiakai.txt");
 
 			output << std::left
 				<< std::setw(20) << "Pavarde"
@@ -187,7 +193,7 @@ int main()
 
 			output.close();
 
-			output.open("vargsiukai.txt");
+			output.open("data/output/vargsiukai.txt");
 
 			output << std::left
 				<< std::setw(20) << "Pavarde"
