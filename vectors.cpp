@@ -98,11 +98,39 @@ int main()
 			<< std::endl << "Ar norite, jog rezultatas isvedamas butu pagal galutini ivertinima? "
 			<< "Pasirinkus ne, bus skaiciuojama pagal mediana. (T/N): ";
 
-		_mkdir("data");
-		_mkdir("data/output");
-
 		std::cin >> pasirinkimas;
 		checkInput(pasirinkimas);
+
+		try {
+
+			int dir = _mkdir("data");
+
+			if (dir == 0)
+				std::cout << "Sukurta direktorija data." << std::endl;
+			else
+				if (dir != 0 && errno == EEXIST)
+				{
+					std::cout << "Direktorija data jau egzistuoja. Nieko nedaroma." << std::endl;
+				}
+				else throw(1);
+
+			dir = _mkdir("data/output");
+
+			if (dir == 0)
+				std::cout << "Sukurta subdirektorija data/output." << std::endl;
+			else
+				if (dir != 0 && errno == EEXIST)
+				{
+					std::cout << "Subdirektorija data/output jau egzistuoja. Nieko nedaroma." << std::endl;
+				}
+				else throw(1);
+		}
+		catch (int err)
+		{
+			std::cout << "Ivyko klaida aplankalu kurimo metu! Programa nutraukia veikla.";
+			exit(1);
+		}
+
 		if (tolower(pasirinkimas) == 't')
 		{
 			clockStart = std::chrono::steady_clock::now();

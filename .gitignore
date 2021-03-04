@@ -11,3 +11,5 @@ Pazymys-skaiciuokle.vcxproj
 Pazymys-skaiciuokle.vcxproj.user
 
 Release/
+
+*.exe

@@ -233,6 +233,36 @@ void askForGeneration()
 
 	std::ofstream output;
 
+	try {
+
+		int dir = _mkdir("data");
+
+		if (dir == 0)
+			std::cout << "Sukurta direktorija data." << std::endl;
+		else 
+			if (dir != 0 && errno == EEXIST)
+			{
+				std::cout << "Direktorija data jau egzistuoja. Nieko nedaroma." << std::endl;
+			}
+			else throw(1);
+
+		dir = _mkdir("data/input");
+
+		if (dir == 0)
+			std::cout << "Sukurta subdirektorija data/input." << std::endl;
+		else 
+			if (dir != 0 && errno == EEXIST)
+			{
+				std::cout << "Subdirektorija data/input jau egzistuoja. Nieko nedaroma." << std::endl;
+			}
+			else throw(1);
+	}
+	catch (int err)
+	{
+		std::cout << "Ivyko klaida aplankalu kurimo metu! Programa nutraukia veikla.";
+		exit(1);
+	}
+
 	std::cout << "Ar norite generuoti 1 000 studentu faila? (T/N): ";
 	std::cin >> pasirinkimas;
 	checkInput(pasirinkimas);
@@ -276,18 +306,17 @@ void askForGeneration()
 
 void generateFile(int numberOfStudents, std::ofstream& output)
 {
-	_mkdir("data");
-	_mkdir("data/input");
-
 	std::string fileName = "studentai" + std::to_string(numberOfStudents) + ".txt";
 	output.open("data/input/" + fileName);
 	output << std::left << std::setw(20) << "Vardas" << std::setw(20) << "Pavarde" ;
-	
 
 	int noOfHomework = 20;
 	std::cout << "Pasirinkite, kiek kiekvienas studentas turejo atsiskaityti namu darbu: ";
 	std::cin >> noOfHomework;
 	checkInput(noOfHomework, false);
+
+	if (noOfHomework == 0)
+		std::cout << "Ivestas nulinis kiekis namu darbu! Darbu skaicius keiciamas i 1." << std::endl;
 
 	clockStart = std::chrono::steady_clock::now();
 
