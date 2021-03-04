@@ -276,8 +276,8 @@ void askForGeneration()
 
 void generateFile(int numberOfStudents, std::ofstream& output)
 {
-	if (mkdir("data") != 0);
-	if (mkdir("data/input") != 0);
+	_mkdir("data");
+	_mkdir("data/input");
 
 	std::string fileName = "studentai" + std::to_string(numberOfStudents) + ".txt";
 	output.open("data/input/" + fileName);

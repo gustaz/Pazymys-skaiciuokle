@@ -98,8 +98,8 @@ int main()
 			<< std::endl << "Ar norite, jog rezultatas isvedamas butu pagal galutini ivertinima? "
 			<< "Pasirinkus ne, bus skaiciuojama pagal mediana. (T/N): ";
 
-		if (mkdir("data") != 0);
-		if (mkdir("data/output") != 0);
+		_mkdir("data");
+		_mkdir("data/output");
 
 		std::cin >> pasirinkimas;
 		checkInput(pasirinkimas);
