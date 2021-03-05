@@ -1,5 +1,5 @@
 #include "declarations.h"
-
+double accumulatedTime = 0;
 
 int main()
 {
@@ -76,7 +76,8 @@ int main()
 
 		studentai[i].galutinisMed = findMedian(studentai[i].nd, studentai[i].nd.size()) * 0.4 + studentai[i].egzaminas * 0.6;
 	}
-	std::cout << "Galutiniu ivertinimu skaiciavimas truko: " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - clockStart).count() << " ms" << std::endl;
+	std::cout << "Galutiniu ivertinimu skaiciavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
+	accumulatedTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
 
 	bool outputDone = false;
 	std::cout << "Dabar yra suteikiama galimybe pasirinkti isvedima."
@@ -136,56 +137,30 @@ int main()
 			clockStart = std::chrono::steady_clock::now();
 			for (int i = 0; i < studentai.size(); i++)
 			{
-				if (studentai[i].galutinisVid >= 5)
+				if (studentai[i].galutinisVid >= 5.00)
 					kietiakai.push_back(studentai[i]);
 				else
 					vargsiukai.push_back(studentai[i]);
 			}
-			std::cout << "Rusiavimas truko: " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - clockStart).count() << " ms" << std::endl
+			std::cout << "Rusiavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl
 				<< "Rusiavimas baigtas!" << std::endl;
+			accumulatedTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
 			clockStart = std::chrono::steady_clock::now();
 			std::ofstream output;
 
 			output.open("data/output/kietiakai.txt");
-
-			output << std::left
-				<< std::setw(20) << "Pavarde"
-				<< std::setw(15) << "Vardas"
-				<< std::setw(10) << "Galutinis (Vid.) \n"
-				<< std::string(65, '-')
-				<< "\n";
-
-			for (int i = 0; i < kietiakai.size(); i++)
-			{
-				output << std::left
-					<< std::setw(20) << kietiakai[i].pavarde
-					<< std::setw(15) << kietiakai[i].vardas
-					<< std::setw(15) << std::fixed << std::setprecision(2) << kietiakai[i].galutinisVid
-					<< "\n";
-			}
-
+			writeToConsoleAvg("(Vid.)", kietiakai, output);
 			output.close();
 
 			output.open("data/output/vargsiukai.txt");
+			writeToConsoleAvg("(Vid.)", vargsiukai, output);
+			output.close();
 
-			output << std::left
-				<< std::setw(20) << "Pavarde"
-				<< std::setw(15) << "Vardas"
-				<< std::setw(10) << "Galutinis (Vid.) \n"
-				<< std::string(65, '-')
-				<< "\n";
-
-			for (int i = 0; i < vargsiukai.size(); i++)
-			{
-				output << std::left
-					<< std::setw(20) << vargsiukai[i].pavarde
-					<< std::setw(15) << vargsiukai[i].vardas
-					<< std::setw(15) << std::fixed << std::setprecision(2) << vargsiukai[i].galutinisVid
-					<< "\n";
-			}
-			std::cout << "Isvestis truko: " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - clockStart).count() << " ms" << std::endl
+			std::cout << "Isvestis truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl
 				<< "Isvestis i faila baigta!";
+			accumulatedTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
 		}
+
 		if (tolower(pasirinkimas) == 'n')
 		{
 			clockStart = std::chrono::steady_clock::now();
@@ -196,52 +171,24 @@ int main()
 				else
 					vargsiukai.push_back(studentai[i]);
 			}
-			std::cout << "Rusiavimas truko: " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - clockStart).count() << " ms" << std::endl
+			std::cout << "Rusiavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl
 				<< "Rusiavimas baigtas!" << std::endl;
+			accumulatedTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
+			
 			clockStart = std::chrono::steady_clock::now();
 			std::ofstream output;
 
 			output.open("data/output/kietiakai.txt");
-
-			output << std::left
-				<< std::setw(20) << "Pavarde"
-				<< std::setw(15) << "Vardas"
-				<< std::setw(10) << "Galutinis (Med.) \n"
-				<< std::string(65, '-')
-				<< "\n";
-
-			for (int i = 0; i < kietiakai.size(); i++)
-			{
-				output << std::left
-					<< std::setw(20) << kietiakai[i].pavarde
-					<< std::setw(15) << kietiakai[i].vardas
-					<< std::setw(15) << std::fixed << std::setprecision(2) << kietiakai[i].galutinisMed
-					<< "\n";
-			}
-
+			writeToConsoleAvg("(Med.)", kietiakai, output);
 			output.close();
 
 			output.open("data/output/vargsiukai.txt");
-
-			output << std::left
-				<< std::setw(20) << "Pavarde"
-				<< std::setw(15) << "Vardas"
-				<< std::setw(10) << "Galutinis (Med.) \n"
-				<< std::string(65, '-')
-				<< "\n";
-
-			for (int i = 0; i < vargsiukai.size(); i++)
-			{
-				output << std::left
-					<< std::setw(20) << vargsiukai[i].pavarde
-					<< std::setw(15) << vargsiukai[i].vardas
-					<< std::setw(15) << std::fixed << std::setprecision(2) << vargsiukai[i].galutinisMed
-					<< "\n";
-			}
-
+			writeToConsoleAvg("(Med.)", vargsiukai, output);
 			output.close();
-			std::cout << "Isvestis truko: " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - clockStart).count() << " ms" << std::endl
+
+			std::cout << "Isvestis truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl
 			<< "Isvestis i failus baigta!";
+			accumulatedTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
 		}
 	}
 
@@ -260,46 +207,17 @@ int main()
 		if (tolower(pasirinkimas) == 't')
 		{
 			clockStart = std::chrono::steady_clock::now();
-			std::cout << std::left
-				<< std::setw(20) << "Pavarde"
-				<< std::setw(15) << "Vardas"
-				<< std::setw(10) << "Galutinis (Vid.) \n"
-				<< std::string(65, '-')
-				<< "\n";
-
-			for (int i = 0; i < studentai.size(); i++)
-			{
-
-				std::cout << std::left
-					<< std::setw(20) << studentai[i].pavarde
-					<< std::setw(15) << studentai[i].vardas
-					<< std::setw(15) << std::fixed << std::setprecision(2) << studentai[i].galutinisVid
-					<< "\n";
-			}
-			std::cout << "Israsymas truko: " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - clockStart).count() << " ms" << "\n";
+			writeToConsoleAvg("(Vid.)", studentai, std::cout);
+			std::cout << "Israsymas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
+			accumulatedTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
 		}
 		if (tolower(pasirinkimas) == 'n')
 		{
 			clockStart = std::chrono::steady_clock::now();
-			std::cout << std::left
-				<< std::setw(20) << "Pavarde"
-				<< std::setw(15) << "Vardas"
-				<< std::setw(10) << "Galutinis (Med.) \n"
-				<< std::string(65, '-')
-				<< "\n";
-
-			for (int i = 0; i < studentai.size(); i++)
-			{
-				std::cout << std::left
-					<< std::setw(20) << studentai[i].pavarde
-					<< std::setw(15) << studentai[i].vardas
-					<< std::setw(15) << std::fixed << std::setprecision(2) << studentai[i].galutinisMed
-					<< "\n";
-			}
-			std::cout << "Israsymas truko: " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - clockStart).count() << " ms" << "\n";
-
+			writeToConsoleMed("(Med.)", studentai, std::cout);
+			std::cout << "Israsymas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
+			accumulatedTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
 		}
 	}
-	std::cout << std::endl;
-	WINPAUSE;
+	std::cout << std::endl << "Galutinis vykdymas truko " << accumulatedTime << " s.";
 }
