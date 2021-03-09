@@ -4,7 +4,6 @@ auto nowForSeed = std::chrono::high_resolution_clock::now();
 auto timeInMSForSeed = std::chrono::duration_cast<std::chrono::milliseconds>(nowForSeed.time_since_epoch()).count();
 
 std::mt19937::result_type seed = timeInMSForSeed;
-
 auto gradeGen = std::bind(std::uniform_int_distribution<int>(1, 10),
 	std::mt19937(seed));
 
@@ -118,7 +117,8 @@ void readFromFile(std::vector<Studentas>& studentai)
 
 	std::cout << "Failo duomenys nuskaityti. "
 		<< std::endl;
-	std::cout << "Nuskaitymas uztruko: " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - clockStart).count() << " ms" << std::endl;
+	std::cout << "Nuskaitymas uztruko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
+	accumulatedTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
 }
 
 void inputStudent(std::vector<Studentas>& studentai)
@@ -227,10 +227,9 @@ void inputStudent(std::vector<Studentas>& studentai)
 	studentai.push_back(stud);
 }
 
-void askForGeneration() 
+void askForGeneration()
 {
 	char pasirinkimas;
-
 	std::ofstream output;
 
 	try {
@@ -239,7 +238,7 @@ void askForGeneration()
 
 		if (dir == 0)
 			std::cout << "Sukurta direktorija data." << std::endl;
-		else 
+		else
 			if (dir != 0 && errno == EEXIST)
 			{
 				std::cout << "Direktorija data jau egzistuoja. Nieko nedaroma." << std::endl;
@@ -250,7 +249,7 @@ void askForGeneration()
 
 		if (dir == 0)
 			std::cout << "Sukurta subdirektorija data/input." << std::endl;
-		else 
+		else
 			if (dir != 0 && errno == EEXIST)
 			{
 				std::cout << "Subdirektorija data/input jau egzistuoja. Nieko nedaroma." << std::endl;
@@ -311,12 +310,6 @@ void generateFile(int numberOfStudents, std::ofstream& output)
 	output << std::left << std::setw(20) << "Vardas" << std::setw(20) << "Pavarde" ;
 
 	int noOfHomework = 20;
-	std::cout << "Pasirinkite, kiek kiekvienas studentas turejo atsiskaityti namu darbu: ";
-	std::cin >> noOfHomework;
-	checkInput(noOfHomework, false);
-
-	if (noOfHomework == 0)
-		std::cout << "Ivestas nulinis kiekis namu darbu! Darbu skaicius keiciamas i 1." << std::endl;
 
 	clockStart = std::chrono::steady_clock::now();
 
@@ -339,7 +332,8 @@ void generateFile(int numberOfStudents, std::ofstream& output)
 		if(i != numberOfStudents - 1) output << std::endl;
 	}
 	output.close();
-	std::cout << "Generavimas truko: " << std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - clockStart).count() << " ms" << std::endl;
+	std::cout << numberOfStudents << " studentu failo generavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
+	accumulatedTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
 }
 
 double findMedian(std::vector<int> grades, int n)
@@ -358,33 +352,71 @@ double findMedian(std::vector<int> grades, int n)
 	}
 }
 
-void checkInput(int& skaicius, bool limited)
+void writeToConsoleAvg(std::string galutinisSuffix, std::vector<Studentas>& studentai, std::ostream& out)
 {
-	while (std::cin.fail() || skaicius < 0 || skaicius > 10)
+	out << std::left
+		<< std::setw(20) << "Pavarde"
+		<< std::setw(15) << "Vardas"
+		<< std::setw(10) << "Galutinis " << galutinisSuffix << "\n"
+		<< std::string(65, '-')
+		<< "\n";
+
+	for (int i = 0; i < studentai.size(); i++)
 	{
-		if (std::cin.fail())
-			std::cout
-			<< "Ivedete reiksme, netenkinancia salygos! (Gal netycia vietoje skaiciaus ivedete raide?)"
-			<< std::endl;
-
-		else if (skaicius <= 0)
-			std::cout
-			<< "Ivedete reiksme, netenkinancia salygos! (Skaicius negali buti mazesne uz 0!)"
-			<< std::endl;
-		else if (skaicius > 10)
-		{
-			if (!limited) break;
-
-			std::cout
-				<< "Ivedete reiksme, netenkinancia salygos! (Skaicius negali buti didesnis uz 10!)"
-				<< std::endl;
-		}
-		std::cin.clear();
-		std::cin.ignore(256, '\n');
-		std::cout << "Pakartokite ivedima: ";
-		std::cin >> skaicius;
+		out << std::left
+			<< std::setw(20) << studentai[i].pavarde
+			<< std::setw(15) << studentai[i].vardas
+			<< std::setw(15) << std::fixed << std::setprecision(2) << studentai[i].galutinisVid
+			<< "\n";
 	}
 }
+
+void writeToConsoleMed(std::string galutinisSuffix, std::vector<Studentas>& studentai, std::ostream& out)
+{
+	out << std::left
+		<< std::setw(20) << "Pavarde"
+		<< std::setw(15) << "Vardas"
+		<< std::setw(10) << "Galutinis " << galutinisSuffix << "\n"
+		<< std::string(65, '-')
+		<< "\n";
+
+	for (int i = 0; i < studentai.size(); i++)
+	{
+		out << std::left
+			<< std::setw(20) << studentai[i].pavarde
+			<< std::setw(15) << studentai[i].vardas
+			<< std::setw(15) << std::fixed << std::setprecision(2) << studentai[i].galutinisMed
+			<< "\n";
+	}
+}
+
+void checkInput(int& skaicius, bool limited)
+	{
+		while (std::cin.fail() || skaicius < 0 || skaicius > 10)
+		{
+			if (std::cin.fail())
+				std::cout
+				<< "Ivedete reiksme, netenkinancia salygos! (Gal netycia vietoje skaiciaus ivedete raide?)"
+				<< std::endl;
+
+			else if (skaicius <= 0)
+				std::cout
+				<< "Ivedete reiksme, netenkinancia salygos! (Skaicius negali buti mazesne uz 0!)"
+				<< std::endl;
+			else if (skaicius > 10)
+			{
+				if (!limited) break;
+
+				std::cout
+					<< "Ivedete reiksme, netenkinancia salygos! (Skaicius negali buti didesnis uz 10!)"
+					<< std::endl;
+			}
+			std::cin.clear();
+			std::cin.ignore(256, '\n');
+			std::cout << "Pakartokite ivedima: ";
+			std::cin >> skaicius;
+		}
+	}
 
 void checkInput(char& ivestis)
 {

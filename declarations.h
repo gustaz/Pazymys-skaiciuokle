@@ -18,6 +18,7 @@
 #endif
 
 static std::chrono::steady_clock::time_point clockStart;
+extern double accumulatedTime;
 
 struct Studentas 
 {
@@ -41,6 +42,8 @@ void inputStudent(std::vector<Studentas>& studentai);
 void askForGeneration();
 void generateFile(int numberOfStudents, std::ofstream& output);
 double findMedian(std::vector<int> grades, int n);
+void writeToConsoleAvg(std::string galutinisSuffix, std::vector<Studentas>& studentai, std::ostream& out);
+void writeToConsoleMed(std::string galutinisSuffix, std::vector<Studentas>& studentai, std::ostream& out);
 void checkInput(int& skaicius, bool limited);
 void checkInput(char& ivestis);
 
