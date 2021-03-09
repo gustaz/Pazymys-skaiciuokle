@@ -38,12 +38,14 @@ struct palyginimas
 };
 
 void readFromFile(std::vector<Studentas>& studentai);
+void readFromFileAutomated(std::vector<Studentas>& studentai, int studentuSkaicius, std::ifstream& input);
 void inputStudent(std::vector<Studentas>& studentai);
 void askForGeneration();
 void generateFile(int numberOfStudents, std::ofstream& output);
+void generateDirectories(std::string directory);
 double findMedian(std::vector<int> grades, int n);
-void writeToConsoleAvg(std::string galutinisSuffix, std::vector<Studentas>& studentai, std::ostream& out);
-void writeToConsoleMed(std::string galutinisSuffix, std::vector<Studentas>& studentai, std::ostream& out);
+void writeToConsoleAvg(std::vector<Studentas>& studentai, std::ostream& out);
+void writeToConsoleMed(std::vector<Studentas>& studentai, std::ostream& out);
 void checkInput(int& skaicius, bool limited);
 void checkInput(char& ivestis);
 
