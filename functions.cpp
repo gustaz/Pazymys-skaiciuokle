@@ -121,6 +121,53 @@ void readFromFile(std::vector<Studentas>& studentai)
 	accumulatedTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
 }
 
+void readFromFileAutomated(std::vector<Studentas>& studentai, int studentuSkaicius, std::ifstream& input)
+{
+	Studentas student;
+
+	std::string fileName = "studentai" + std::to_string(studentuSkaicius) + ".txt";
+	input.open("data/input/" + fileName);
+	input.ignore(256, '\n');
+	
+	try
+	{
+		while (!input.eof())
+		{
+
+			std::string line, vardas, pavarde;
+
+			input >> vardas >> pavarde;
+			getline(input, line);
+
+			std::stringstream stream(line);
+			std::vector<int> values;
+
+			int n;
+			while (stream >> n)
+			{
+				values.push_back(n);
+			}
+
+			if (line.length() != 0)
+			{
+				values.pop_back();
+				student.egzaminas = n;
+				student.nd = values;
+				student.vardas = vardas;
+				student.pavarde = pavarde;
+				studentai.push_back(student);
+			}
+		}
+	}
+	catch (std::bad_alloc& exception)
+	{
+		input.ignore(256, '\n');
+		std::cout << "Programa aptiko klaidu faile! Tolimesnis sklandus veikimas negarantuojamas."
+			<< std::endl;
+	}
+	input.close();
+}
+
 void inputStudent(std::vector<Studentas>& studentai)
 {
 	Studentas stud;
@@ -231,43 +278,19 @@ void askForGeneration()
 {
 	char pasirinkimas;
 	std::ofstream output;
-
-	try {
-
-		int dir = _mkdir("data");
-
-		if (dir == 0)
-			std::cout << "Sukurta direktorija data." << std::endl;
-		else
-			if (dir != 0 && errno == EEXIST)
-			{
-				std::cout << "Direktorija data jau egzistuoja. Nieko nedaroma." << std::endl;
-			}
-			else throw(1);
-
-		dir = _mkdir("data/input");
-
-		if (dir == 0)
-			std::cout << "Sukurta subdirektorija data/input." << std::endl;
-		else
-			if (dir != 0 && errno == EEXIST)
-			{
-				std::cout << "Subdirektorija data/input jau egzistuoja. Nieko nedaroma." << std::endl;
-			}
-			else throw(1);
-	}
-	catch (int err)
-	{
-		std::cout << "Ivyko klaida aplankalu kurimo metu! Programa nutraukia veikla.";
-		exit(1);
-	}
+	
+	generateDirectories("data");
+	generateDirectories("data/input");
 
 	std::cout << "Ar norite generuoti 1 000 studentu faila? (T/N): ";
 	std::cin >> pasirinkimas;
 	checkInput(pasirinkimas);
 	if (tolower(pasirinkimas) == 't')
 	{
+		clockStart = std::chrono::steady_clock::now();
 		generateFile(1000, output);
+		std::cout << 1000 << " studentu failo generavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
+		accumulatedTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
 	}
 
 	std::cout << "Ar norite generuoti 10 000 studentu faila? (T/N): ";
@@ -275,7 +298,10 @@ void askForGeneration()
 	checkInput(pasirinkimas);
 	if (tolower(pasirinkimas) == 't')
 	{
+		clockStart = std::chrono::steady_clock::now();
 		generateFile(10000, output);
+		std::cout << 10000 << " studentu failo generavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
+		accumulatedTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
 	}
 
 	std::cout << "Ar norite generuoti 100 000 studentu faila? (T/N): ";
@@ -283,7 +309,10 @@ void askForGeneration()
 	checkInput(pasirinkimas);
 	if (tolower(pasirinkimas) == 't')
 	{
+		clockStart = std::chrono::steady_clock::now();
 		generateFile(100000, output);
+		std::cout << 100000 << " studentu failo generavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
+		accumulatedTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
 	}
 
 	std::cout << "Ar norite generuoti 1 000 000 studentu faila? (T/N): ";
@@ -291,7 +320,10 @@ void askForGeneration()
 	checkInput(pasirinkimas);
 	if (tolower(pasirinkimas) == 't')
 	{
+		clockStart = std::chrono::steady_clock::now();
 		generateFile(1000000, output);
+		std::cout << 1000000 << " studentu failo generavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
+		accumulatedTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
 	}
 
 	std::cout << "Ar norite generuoti 10 000 000 studentu faila? (T/N): ";
@@ -299,7 +331,30 @@ void askForGeneration()
 	checkInput(pasirinkimas);
 	if (tolower(pasirinkimas) == 't')
 	{
+		clockStart = std::chrono::steady_clock::now();
 		generateFile(10000000, output);
+	}
+}
+
+void generateDirectories(std::string directory)
+{
+	try 
+	{
+		int dir = _mkdir(directory.c_str());
+
+		if (dir == 0)
+			std::cout << "Sukurta direktorija " + directory << "." << std::endl;
+		else
+			if (dir != 0 && errno == EEXIST)
+			{
+				std::cout << "Direktorija " + directory + " jau egzistuoja. Nieko nedaroma." << std::endl;
+			}
+		else throw(1);
+	}
+	catch (int err)
+	{
+		std::cout << "Ivyko klaida aplankalu kurimo metu! Programa nutraukia veikla.";
+		exit(1);
 	}
 }
 
@@ -310,8 +365,6 @@ void generateFile(int numberOfStudents, std::ofstream& output)
 	output << std::left << std::setw(20) << "Vardas" << std::setw(20) << "Pavarde" ;
 
 	int noOfHomework = 20;
-
-	clockStart = std::chrono::steady_clock::now();
 
 	for (int i = 0; i < noOfHomework; i++)
 	{
@@ -332,8 +385,6 @@ void generateFile(int numberOfStudents, std::ofstream& output)
 		if(i != numberOfStudents - 1) output << std::endl;
 	}
 	output.close();
-	std::cout << numberOfStudents << " studentu failo generavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
-	accumulatedTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
 }
 
 double findMedian(std::vector<int> grades, int n)
@@ -352,12 +403,12 @@ double findMedian(std::vector<int> grades, int n)
 	}
 }
 
-void writeToConsoleAvg(std::string galutinisSuffix, std::vector<Studentas>& studentai, std::ostream& out)
+void writeToConsoleAvg(std::vector<Studentas>& studentai, std::ostream& out)
 {
 	out << std::left
 		<< std::setw(20) << "Pavarde"
 		<< std::setw(15) << "Vardas"
-		<< std::setw(10) << "Galutinis " << galutinisSuffix << "\n"
+		<< std::setw(10) << "Galutinis " << "(Vid.)" << "\n"
 		<< std::string(65, '-')
 		<< "\n";
 
@@ -371,12 +422,12 @@ void writeToConsoleAvg(std::string galutinisSuffix, std::vector<Studentas>& stud
 	}
 }
 
-void writeToConsoleMed(std::string galutinisSuffix, std::vector<Studentas>& studentai, std::ostream& out)
+void writeToConsoleMed(std::vector<Studentas>& studentai, std::ostream& out)
 {
 	out << std::left
 		<< std::setw(20) << "Pavarde"
 		<< std::setw(15) << "Vardas"
-		<< std::setw(10) << "Galutinis " << galutinisSuffix << "\n"
+		<< std::setw(10) << "Galutinis " << "(Med.)" << "\n"
 		<< std::string(65, '-')
 		<< "\n";
 
