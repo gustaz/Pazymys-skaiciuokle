@@ -9,7 +9,6 @@ int main()
 
 	std::cout << "Atsakydami i programos uzduodamus klausimus rasykite raides T (-taip) arba N (-ne)."
 		<< std::endl;
-
 	std::vector<Studentas> studentai;
 	char pasirinkimas;
 
@@ -21,7 +20,6 @@ int main()
 
 	if (tolower(pasirinkimas) == 't')
 	{
-		
 		std::vector<int> studentuFailuDydziai = { 1000, 10000, 100000, 1000000, 10000000};
 		std::ofstream output;
 		std::ifstream input;
@@ -37,11 +35,17 @@ int main()
 				<< studentuFailuDydziai[i] << " duomenimis." << std::endl;
 
 			clockStart = std::chrono::steady_clock::now();
+			std::cout << "Vykdomas failo generavimas." << std::endl;
 			generateFile(studentuFailuDydziai[i], output);
 			std::cout << studentuFailuDydziai[i] << " studentu failo generavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
 			benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
 
+			std::cout << "Vykdomas failo nuskaitymas." << std::endl;
+			clockStart = std::chrono::steady_clock::now();
 			readFromFileAutomated(studentai, studentuFailuDydziai[i], input);
+			benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
+			std::cout << studentuFailuDydziai[i] << " studentu failo nuskaitymas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
+
 			std::cout << "Vykdomas galutiniu ivertinimu skaiciavimas." << std::endl;
 			clockStart = std::chrono::steady_clock::now();
 			for (int i = 0; i < studentai.size(); i++)
