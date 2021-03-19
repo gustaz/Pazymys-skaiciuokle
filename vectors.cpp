@@ -1,7 +1,7 @@
 #include "declarations.h"
 double accumulatedTime = 0;
 
-int main()
+int main(int argc, char* argv[])
 {
 	std::chrono::steady_clock::time_point programStart = std::chrono::steady_clock::now();
 	std::cin.sync_with_stdio(false);
@@ -9,18 +9,13 @@ int main()
 
 	std::cout << "Atsakydami i programos uzduodamus klausimus rasykite raides T (-taip) arba N (-ne)."
 		<< std::endl;
-	std::vector<Studentas> studentai;
+
 	char pasirinkimas;
 
-	std::cout << "Ar norite vykdyti spartos testavima? "
-		<< "Pasirinkus ne, programa veiks iprasta eiga. (T/N): ";
 
-	std::cin >> pasirinkimas;
-	checkInput(pasirinkimas);
-
-	if (tolower(pasirinkimas) == 't')
+	if (argc > 1)
 	{
-		std::vector<int> studentuFailuDydziai = { 1000, 10000, 100000, 1000000, 10000000};
+		std::vector<int> studentuFailuDydziai = { 1000, 10000, 100000, 1000000, 10000000 };
 		std::ofstream output;
 		std::ifstream input;
 
@@ -28,76 +23,28 @@ int main()
 		generateDirectories("data/input");
 		generateDirectories("data/output");
 
-		for (int i = 0; i < studentuFailuDydziai.size(); i++)
+		std::cout << argv[0];
+		for (int i = 1; i <= argc; i++)
 		{
-			double benchmarkTime = 0;
-			std::cout << std::endl << "Pradedamas darbas su "
-				<< studentuFailuDydziai[i] << " duomenimis." << std::endl;
-
-			clockStart = std::chrono::steady_clock::now();
-			std::cout << "Vykdomas failo generavimas." << std::endl;
-			generateFile(studentuFailuDydziai[i], output);
-			std::cout << studentuFailuDydziai[i] << " studentu failo generavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
-			benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
-
-			std::cout << "Vykdomas failo nuskaitymas." << std::endl;
-			clockStart = std::chrono::steady_clock::now();
-			readFromFileAutomated(studentai, studentuFailuDydziai[i], input);
-			benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
-			std::cout << studentuFailuDydziai[i] << " studentu failo nuskaitymas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
-
-			std::cout << "Vykdomas galutiniu ivertinimu skaiciavimas." << std::endl;
-			clockStart = std::chrono::steady_clock::now();
-			for (int i = 0; i < studentai.size(); i++)
+			if (strcmp(argv[i], "vector") == 0)
 			{
-				double avg = 0;
-				for (int j = 0; j < studentai[i].nd.size(); j++)
-				{
-					avg += studentai[i].nd[j];
-				}
-				avg /= studentai[i].nd.size();
-				studentai[i].galutinisVid = 0.4 * avg + 0.6 * studentai[i].egzaminas;
-
-				studentai[i].galutinisMed = findMedian(studentai[i].nd, studentai[i].nd.size()) * 0.4 + studentai[i].egzaminas * 0.6;
+				std::vector<Studentas> studentai;
+				workFlow(studentai, studentuFailuDydziai, input, output);
 			}
-			std::cout << "Galutiniu ivertinimu skaiciavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
-			benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
 
-			std::vector<Studentas> kietiakai;
-			std::vector<Studentas> vargsiukai;
-
-			std::cout << "Vykdomas studentu rusiavimas pagal galutini ivertinima." << std::endl;
-			clockStart = std::chrono::steady_clock::now();
-			for (int i = 0; i < studentai.size(); i++)
+			if (strcmp(argv[i], "deque") == 0)
 			{
-				if (studentai[i].galutinisVid >= 5.00)
-					kietiakai.push_back(studentai[i]);
-				else
-					vargsiukai.push_back(studentai[i]);
+				std::deque<Studentas> studentai;
+				workFlow(studentai, studentuFailuDydziai, input, output);
 			}
-			std::cout << "Rusiavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
-			benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
-			
-			clockStart = std::chrono::steady_clock::now();
-			std::cout << "Vykdomas " << studentuFailuDydziai[i] << " studentu duomenu isvedimas i faila." << std::endl;
-			
-			output.open("data/output/kietiakai" + std::to_string(studentuFailuDydziai[i]) + ".txt");
-			writeToConsoleAvg(kietiakai, output);
-			output.close();
 
-			output.open("data/output/vargsiukai" + std::to_string(studentuFailuDydziai[i]) + ".txt");
-			writeToConsoleAvg(vargsiukai, output);
-			output.close();
-
-			std::cout << "Isvestis truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
-			benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
-			accumulatedTime += benchmarkTime;
-			std::cout << studentuFailuDydziai[i] << " isvedimas is viso truko: " << benchmarkTime << " s" << std::endl;
 		}
 	}
 
-	if (tolower(pasirinkimas) == 'n')
+	else
 	{
+		std::cout << "Nepasirinkti vykdymo argumentai programos paleidimo metu, todel pereinama prie iprastos veiklos. " << std::endl;
+		std::vector<Studentas> studentai;
 		std::cout << "Ar norite vykdyti failu generacija? (T/N): ";
 		std::cin >> pasirinkimas;
 		checkInput(pasirinkimas);
