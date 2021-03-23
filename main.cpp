@@ -1,7 +1,7 @@
 #include "declarations.h"
 double accumulatedTime = 0;
 
-int main()
+int main(int argc, char* argv[])
 {
 	std::chrono::steady_clock::time_point programStart = std::chrono::steady_clock::now();
 	std::cin.sync_with_stdio(false);
@@ -9,95 +9,99 @@ int main()
 
 	std::cout << "Atsakydami i programos uzduodamus klausimus rasykite raides T (-taip) arba N (-ne)."
 		<< std::endl;
-	std::vector<Studentas> studentai;
+
 	char pasirinkimas;
-
-	std::cout << "Ar norite vykdyti spartos testavima? "
-		<< "Pasirinkus ne, programa veiks iprasta eiga. (T/N): ";
-
-	std::cin >> pasirinkimas;
-	checkInput(pasirinkimas);
-
-	if (tolower(pasirinkimas) == 't')
+	bool isValid = false;
+	if (argc > 1)
 	{
-		std::vector<int> studentuFailuDydziai = { 1000, 10000, 100000, 1000000, 10000000};
-		std::ofstream output;
-		std::ifstream input;
+		
+		for (int i = 1; i < argc; i++)
+			if (strcmp(argv[i], "vector") == 0 || strcmp(argv[i], "deque") == 0 || strcmp(argv[i], "list") == 0)
+				isValid = true;
 
-		generateDirectories("data");
-		generateDirectories("data/input");
-		generateDirectories("data/output");
-
-		for (int i = 0; i < studentuFailuDydziai.size(); i++)
+		if (isValid)
 		{
-			double benchmarkTime = 0;
-			std::cout << std::endl << "Pradedamas darbas su "
-				<< studentuFailuDydziai[i] << " duomenimis." << std::endl;
+			std::vector<int> studentuFailuDydziai = { 1000, 10000, 100000, 1000000, 10000000 };
+			//std::vector<int> studentuFailuDydziai = { 1000, 10000, 100000 };
+			std::ofstream output;
+			std::ifstream input;
 
-			clockStart = std::chrono::steady_clock::now();
-			std::cout << "Vykdomas failo generavimas." << std::endl;
-			generateFile(studentuFailuDydziai[i], output);
-			std::cout << studentuFailuDydziai[i] << " studentu failo generavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
-			benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
+			generateDirectories("data");
+			generateDirectories("data/input");
+			generateDirectories("data/output");
 
-			std::cout << "Vykdomas failo nuskaitymas." << std::endl;
-			clockStart = std::chrono::steady_clock::now();
-			readFromFileAutomated(studentai, studentuFailuDydziai[i], input);
-			benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
-			std::cout << studentuFailuDydziai[i] << " studentu failo nuskaitymas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
+			for (int i = 0; i < studentuFailuDydziai.size(); i++)
+				generationSequence(studentuFailuDydziai[i], output, accumulatedTime);
 
-			std::cout << "Vykdomas galutiniu ivertinimu skaiciavimas." << std::endl;
-			clockStart = std::chrono::steady_clock::now();
-			for (int i = 0; i < studentai.size(); i++)
+			for (int i = 1; i < argc; i++)
 			{
-				double avg = 0;
-				for (int j = 0; j < studentai[i].nd.size(); j++)
+				for (int j = 0; j < studentuFailuDydziai.size(); j++)
 				{
-					avg += studentai[i].nd[j];
+					std::cout << "Pradedamas darbas su " << studentuFailuDydziai[j] << " " << argv[i] << " konteineriu" << std::endl;
+					double benchmarkTime = 0;
+					if (strcmp(argv[i], "vector") == 0)
+					{
+						std::vector<Studentas> studentai;
+						std::vector<Studentas> vargsiukai;
+
+						workFlow(studentai, studentuFailuDydziai[j], input, output, argv[i], benchmarkTime);
+
+						std::cout << "Vykdomas studentu rusiavimas pagal galutini ivertinima." << std::endl;
+						clockStart = std::chrono::steady_clock::now();
+						std::sort(studentai.begin(), studentai.end(), compGrade());
+						sortInto(studentai, vargsiukai, studentuFailuDydziai[j]);
+						std::sort(studentai.begin(), studentai.end(), compSurname());
+						std::sort(vargsiukai.begin(), vargsiukai.end(), compSurname());
+						std::cout << "Rusiavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
+						benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
+
+						thenPrint(studentai, vargsiukai, studentuFailuDydziai[j], output, benchmarkTime, argv[i]);
+					}
+					else if (strcmp(argv[i], "deque") == 0)
+					{
+						std::deque<Studentas> studentai;
+						std::deque<Studentas> vargsiukai;
+
+						workFlow(studentai, studentuFailuDydziai[j], input, output, argv[i], benchmarkTime);
+
+						std::cout << "Vykdomas studentu rusiavimas pagal galutini ivertinima." << std::endl;
+						clockStart = std::chrono::steady_clock::now();
+						std::sort(studentai.begin(), studentai.end(), compGrade());
+						sortInto(studentai, vargsiukai, studentuFailuDydziai[j]);
+						std::sort(studentai.begin(), studentai.end(), compSurname());
+						std::sort(vargsiukai.begin(), vargsiukai.end(), compSurname());
+						std::cout << "Rusiavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
+						benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
+
+						thenPrint(studentai, vargsiukai, studentuFailuDydziai[j], output, benchmarkTime, argv[i]);
+					}
+					else if (strcmp(argv[i], "list") == 0)
+					{
+						std::list<Studentas> studentai;
+						std::list<Studentas> vargsiukai;
+
+						workFlow(studentai, studentuFailuDydziai[j], input, output, argv[i], benchmarkTime);
+
+						std::cout << "Vykdomas studentu rusiavimas pagal galutini ivertinima." << std::endl;
+						clockStart = std::chrono::steady_clock::now();
+						studentai.sort(compGrade());
+						sortInto(studentai, vargsiukai, studentuFailuDydziai[j]);
+						studentai.sort(compSurname());
+						vargsiukai.sort(compSurname());
+						std::cout << "Rusiavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
+						benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
+
+						thenPrint(studentai, vargsiukai, studentuFailuDydziai[j], output, benchmarkTime, argv[i]);
+					}
+                    std::cout << std::endl;
 				}
-				avg /= studentai[i].nd.size();
-				studentai[i].galutinisVid = 0.4 * avg + 0.6 * studentai[i].egzaminas;
-
-				studentai[i].galutinisMed = findMedian(studentai[i].nd, studentai[i].nd.size()) * 0.4 + studentai[i].egzaminas * 0.6;
 			}
-			std::cout << "Galutiniu ivertinimu skaiciavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
-			benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
-
-			std::vector<Studentas> kietiakai;
-			std::vector<Studentas> vargsiukai;
-
-			std::cout << "Vykdomas studentu rusiavimas pagal galutini ivertinima." << std::endl;
-			clockStart = std::chrono::steady_clock::now();
-			for (int i = 0; i < studentai.size(); i++)
-			{
-				if (studentai[i].galutinisVid >= 5.00)
-					kietiakai.push_back(studentai[i]);
-				else
-					vargsiukai.push_back(studentai[i]);
-			}
-			std::cout << "Rusiavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
-			benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
-			
-			clockStart = std::chrono::steady_clock::now();
-			std::cout << "Vykdomas " << studentuFailuDydziai[i] << " studentu duomenu isvedimas i faila." << std::endl;
-			
-			output.open("data/output/kietiakai" + std::to_string(studentuFailuDydziai[i]) + ".txt");
-			writeToConsoleAvg(kietiakai, output);
-			output.close();
-
-			output.open("data/output/vargsiukai" + std::to_string(studentuFailuDydziai[i]) + ".txt");
-			writeToConsoleAvg(vargsiukai, output);
-			output.close();
-
-			std::cout << "Isvestis truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
-			benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
-			accumulatedTime += benchmarkTime;
-			std::cout << studentuFailuDydziai[i] << " isvedimas is viso truko: " << benchmarkTime << " s" << std::endl;
 		}
 	}
-
-	if (tolower(pasirinkimas) == 'n')
+	if(argc <= 1 || !isValid)
 	{
+		std::cout << "Nepasirinkti (teisingi) vykdymo argumentai programos paleidimo metu, todel pereinama prie iprastos veiklos. " << std::endl;
+		std::vector<Studentas> studentai;
 		std::cout << "Ar norite vykdyti failu generacija? (T/N): ";
 		std::cin >> pasirinkimas;
 		checkInput(pasirinkimas);
@@ -249,7 +253,7 @@ int main()
 
 		if (tolower(pasirinkimas) == 'n' && !outputDone)
 		{
-			std::sort(studentai.begin(), studentai.end(), palyginimas());
+			std::sort(studentai.begin(), studentai.end(), compSurname());
 			std::cout << "Pasirinkote paprasta isvesti i komandine eilute."
 				<< std::endl << "Ar norite, jog rezultate butu rodomas vidurkis? "
 				<< "Pasirinkus ne, bus rodoma mediana. (T/N): ";
