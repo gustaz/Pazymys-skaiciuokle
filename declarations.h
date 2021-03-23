@@ -14,6 +14,7 @@
 #include <direct.h>
 #include <list>
 #include <deque>
+#include <iterator>
 
 #ifdef _WIN32
 #define WINPAUSE system("pause")
@@ -31,11 +32,19 @@ struct Studentas
 	double galutinisMed = 0;
 };
 
-struct palyginimas
+struct compSurname
 {
 	inline bool operator() (const Studentas& struct1, const Studentas& struct2)
 	{
 		return (struct1.pavarde.compare(struct2.pavarde)) < 0;
+	}
+};
+
+struct compGrade
+{
+	inline bool operator() (const Studentas& struct1, const Studentas& struct2)
+	{
+		return (struct1.galutinisVid < struct2.galutinisVid);
 	}
 };
 
@@ -48,6 +57,10 @@ auto static gradeGen = std::bind(std::uniform_int_distribution<int>(1, 10),
 
 void checkInput(int& skaicius, bool limited);
 void checkInput(char& ivestis);
+void askForGeneration();
+void generateFile(int numberOfStudents, std::ofstream& output);
+void generateDirectories(std::string directory);
+double findMedian(std::vector<int> grades, int n);
 
 template <class T>
 void readFromFile(T& studentai)
@@ -168,11 +181,10 @@ template <class T>
 void readFromFileAutomated(T& studentai, int studentuSkaicius, std::ifstream& input)
 {
 	Studentas student;
-
 	std::string fileName = "studentai" + std::to_string(studentuSkaicius) + ".txt";
 	input.open("data/input/" + fileName);
 	input.ignore(256, '\n');
-
+	
 	try
 	{
 		while (!input.eof())
@@ -185,18 +197,23 @@ void readFromFileAutomated(T& studentai, int studentuSkaicius, std::ifstream& in
 
 			std::stringstream stream(line);
 			std::vector<int> values;
-
-			int n;
+			int n = 0;
+			double avg = 0;
 			while (stream >> n)
 			{
 				values.push_back(n);
+				avg += n;
 			}
 
 			if (line.length() != 0)
 			{
+				avg -= n;
 				values.pop_back();
+				avg /= values.size();
 				student.egzaminas = n;
 				student.nd = values;
+				student.galutinisVid = 0.4 * avg + 0.6 * student.egzaminas;
+				student.galutinisMed = findMedian(student.nd, student.nd.size()) * 0.4 + student.egzaminas * 0.6;
 				student.vardas = vardas;
 				student.pavarde = pavarde;
 				studentai.push_back(student);
@@ -319,11 +336,6 @@ void inputStudent(T& studentai)
 	studentai.push_back(stud);
 }
 
-void askForGeneration();
-void generateFile(int numberOfStudents, std::ofstream& output);
-void generateDirectories(std::string directory);
-double findMedian(std::vector<int> grades, int n);
-
 template <class T>
 void writeToConsoleAvg(T& studentai, std::ostream& out)
 {
@@ -334,12 +346,12 @@ void writeToConsoleAvg(T& studentai, std::ostream& out)
 		<< std::string(65, '-')
 		<< "\n";
 
-	for (int i = 0; i < studentai.size(); i++)
+	for (auto const& i : studentai)
 	{
 		out << std::left
-			<< std::setw(20) << studentai[i].pavarde
-			<< std::setw(15) << studentai[i].vardas
-			<< std::setw(15) << std::fixed << std::setprecision(2) << studentai[i].galutinisVid
+			<< std::setw(20) << i.pavarde
+			<< std::setw(15) << i.vardas
+			<< std::setw(15) << std::fixed << std::setprecision(2) << i.galutinisVid
 			<< "\n";
 	}
 }
@@ -354,86 +366,60 @@ void writeToConsoleMed(T& studentai, std::ostream& out)
 		<< std::string(65, '-')
 		<< "\n";
 
-	for (int i = 0; i < studentai.size(); i++)
+	for (auto const& i : studentai)
 	{
 		out << std::left
-			<< std::setw(20) << studentai[i].pavarde
-			<< std::setw(15) << studentai[i].vardas
-			<< std::setw(15) << std::fixed << std::setprecision(2) << studentai[i].galutinisMed
+			<< std::setw(20) << i.pavarde
+			<< std::setw(15) << i.vardas
+			<< std::setw(15) << std::fixed << std::setprecision(2) << i.galutinisMed
 			<< "\n";
+	}
+
+}
+
+template <class T>
+void workFlow(T& studentai, int studentuFailuDydziai, std::ifstream& input, std::ofstream& output, char* type, double& benchmarkTime)
+{
+	std::cout << "Vykdomas failo nuskaitymas." << std::endl;
+	clockStart = std::chrono::steady_clock::now();
+	readFromFileAutomated(studentai, studentuFailuDydziai, input);
+	benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
+	std::cout << studentuFailuDydziai << " studentu failo nuskaitymas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
+}
+template <class T>
+void sortInto(T& studentai, T& vargsiukai, int studentuFailuDydziai)
+{
+	for (auto it = studentai.begin(); it != studentai.end(); ++it)
+	{
+		if (it->galutinisVid >= 5.00)
+		{
+			
+			vargsiukai.assign(studentai.begin(), it);
+			studentai.erase(studentai.begin(), it);
+			break;
+		}
 	}
 }
 
 template <class T>
-void workFlow(T& studentai, std::vector<int> studentuFailuDydziai, std::ifstream& input, std::ofstream& output)
+void thenPrint(T& studentai, T& vargsiukai, int studentuFailuDydziai, std::ofstream& output, double& benchmarkTime, char container[])
 {
-	for (int i = 0; i < studentuFailuDydziai.size(); i++)
-	{
+	clockStart = std::chrono::steady_clock::now();
+	std::cout << "Vykdomas " << studentuFailuDydziai << " studentu duomenu isvedimas i faila." << std::endl;
 
-		double benchmarkTime = 0;
-		std::cout << std::endl << "Pradedamas darbas su "
-			<< studentuFailuDydziai[i] << " duomenimis." << std::endl;
+	std::string containerName = container;
+	output.open("data/output/kietiakai" + containerName + std::to_string(studentuFailuDydziai) + ".txt");
+	writeToConsoleAvg(studentai, output);
+	output.close();
 
-		clockStart = std::chrono::steady_clock::now();
-		std::cout << "Vykdomas failo generavimas." << std::endl;
-		generateFile(studentuFailuDydziai[i], output);
-		std::cout << studentuFailuDydziai[i] << " studentu failo generavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
-		benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
+	output.open("data/output/vargsiukai" + containerName + std::to_string(studentuFailuDydziai) + ".txt");
+	writeToConsoleAvg(vargsiukai, output);
+	output.close();
 
-		std::cout << "Vykdomas failo nuskaitymas." << std::endl;
-		clockStart = std::chrono::steady_clock::now();
-		readFromFileAutomated(studentai, studentuFailuDydziai[i], input);
-		benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
-		std::cout << studentuFailuDydziai[i] << " studentu failo nuskaitymas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
-
-		std::cout << "Vykdomas galutiniu ivertinimu skaiciavimas." << std::endl;
-		clockStart = std::chrono::steady_clock::now();
-		for (int i = 0; i < studentai.size(); i++)
-		{
-			double avg = 0;
-			for (int j = 0; j < studentai.at(i).nd.size(); j++)
-			{
-				avg += studentai.at(i).nd.at(j);
-			}
-			avg /= studentai.at(i).nd.size();
-			studentai.at(i).galutinisVid = 0.4 * avg + 0.6 * studentai.at(i).egzaminas;
-
-			studentai.at(i).galutinisMed = findMedian(studentai.at(i).nd, studentai.at(i).nd.size()) * 0.4 + studentai.at(i).egzaminas * 0.6;
-		}
-		std::cout << "Galutiniu ivertinimu skaiciavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
-		benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
-
-		std::vector<Studentas> kietiakai;
-		std::vector<Studentas> vargsiukai;
-
-		std::cout << "Vykdomas studentu rusiavimas pagal galutini ivertinima." << std::endl;
-		clockStart = std::chrono::steady_clock::now();
-		for (int i = 0; i < studentai.size(); i++)
-		{
-			if (studentai.at(i).galutinisVid >= 5.00)
-				kietiakai.push_back(studentai.at(i));
-			else
-				vargsiukai.push_back(studentai.at(i));
-		}
-		std::cout << "Rusiavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
-		benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
-
-		clockStart = std::chrono::steady_clock::now();
-		std::cout << "Vykdomas " << studentuFailuDydziai[i] << " studentu duomenu isvedimas i faila." << std::endl;
-
-		output.open("data/output/kietiakai" + std::to_string(studentuFailuDydziai[i]) + ".txt");
-		writeToConsoleAvg(kietiakai, output);
-		output.close();
-
-		output.open("data/output/vargsiukai" + std::to_string(studentuFailuDydziai[i]) + ".txt");
-		writeToConsoleAvg(vargsiukai, output);
-		output.close();
-
-		std::cout << "Isvestis truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
-		benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
-		accumulatedTime += benchmarkTime;
-		std::cout << studentuFailuDydziai[i] << " isvedimas is viso truko: " << benchmarkTime << " s" << std::endl;
-	}
+	std::cout << "Isvestis truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
+	benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
+	accumulatedTime += benchmarkTime;
+	std::cout << studentuFailuDydziai << " isvedimas is viso truko: " << benchmarkTime << " s" << std::endl;
 }
-
+void generationSequence(int studentuFailuDydziai, std::ofstream& output, double& benchmarkTime);
 #endif

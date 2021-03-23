@@ -113,6 +113,18 @@ void generateFile(int numberOfStudents, std::ofstream& output)
 	output.close();
 }
 
+void generationSequence(int studentuFailuDydziai, std::ofstream& output, double& benchmarkTime)
+{
+	std::cout << std::endl << "Pradedamas darbas su "
+		<< studentuFailuDydziai << " duomenimis." << std::endl;
+
+	clockStart = std::chrono::steady_clock::now();
+	std::cout << "Vykdomas failo generavimas." << std::endl;
+	generateFile(studentuFailuDydziai, output);
+	std::cout << studentuFailuDydziai << " studentu failo generavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
+	benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
+}
+
 double findMedian(std::vector<int> grades, int n)
 {
 	if (n % 2 == 0) {
