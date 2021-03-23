@@ -34,20 +34,20 @@ Naudojimas
 
 ## Programos spartos įvertinimas
 
-| Konteineris  | 1000    | 10 000 | 100 000 | 1 000 000 | 10 000 000 |
-| ------------ | ------- | ------ | ------- | --------- | ---------- |
-| **Vector**   | 0.050s  | 0.191s | 1.732s  | 18.523s   | 191.880s   |
-| Nuskaitymas  | 0.021s  | 0.115s | 1.120s  | 11.738s   | 114.629s   |
-| Isrusiavimas | 0.002s  | 0.030s | 0.407s  |  4.865s   |  58.336s   |
-| Isvedimas    | 0.026s  | 0.044s | 0.204s  |  1.919s   |  18.882s   |
-| **Deque**    | 0.034s  | 0.193s | 1.875s  | 19.673s   | 207.906s   |
-| Nuskaitymas  | 0.011s  | 0.112s | 1.181s  | 11.435s   | 114.040s   |
-| Isrusiavimas | 0.003s  | 0.040s | 0.487s  |  6.255s   |  74.644s   |
-| Isvedimas    | 0.019s  | 0.040s | 0.207s  |  1.981s   |  19.221s   |
-| **List**     | 0.034s  | 0.169s | 1.616s  | 16.964s   | 180.331s   |
-| Nuskaitymas  | 0.011s  | 0.116s | 1.130s  | 11.553s   | 116.246s   |
-| Isrusiavimas | 0.001s  | 0.015s | 0.254s  |  3.320s   |  44.200s   |
-| Isvedimas    | 0.020s  | 0.037s | 0.230s  |  2.090s   |  19.883s   |
+| Konteineris  | 1 000    | 10 000 | 100 000 | 1 000 000 | 10 000 000 |
+| ------------ | -------- | ------ | ------- | --------- | ---------- |
+| **Vector**   | 0.050s   | 0.191s | 1.732s  | 18.523s   | 191.880s   |
+| Nuskaitymas  | 0.021s   | 0.115s | 1.120s  | 11.738s   | 114.629s   |
+| Isrusiavimas | 0.002s   | 0.030s | 0.407s  |  4.865s   |  58.336s   |
+| Isvedimas    | 0.026s   | 0.044s | 0.204s  |  1.919s   |  18.882s   |
+| **Deque**    | 0.034s   | 0.193s | 1.875s  | 19.673s   | 207.906s   |
+| Nuskaitymas  | 0.011s   | 0.112s | 1.181s  | 11.435s   | 114.040s   |
+| Isrusiavimas | 0.003s   | 0.040s | 0.487s  |  6.255s   |  74.644s   |
+| Isvedimas    | 0.019s   | 0.040s | 0.207s  |  1.981s   |  19.221s   |
+| **List**     | 0.034s   | 0.169s | 1.616s  | 16.964s   | 180.331s   |
+| Nuskaitymas  | 0.011s   | 0.116s | 1.130s  | 11.553s   | 116.246s   |
+| Isrusiavimas | 0.001s   | 0.015s | 0.254s  |  3.320s   |  44.200s   |
+| Isvedimas    | 0.020s   | 0.037s | 0.230s  |  2.090s   |  19.883s   |
 
 AMD Ryzen 5-3550H, 2.1GHz Quad-core, 16GB DDR4 2333MHz RAM, NVMe SSD.
 	
@@ -57,4 +57,5 @@ AMD Ryzen 5-3550H, 2.1GHz Quad-core, 16GB DDR4 2333MHz RAM, NVMe SSD.
 * [v0.3](https://github.com/gustaz/Pazymys-skaiciuokle/releases/tag/v0.3) Programa išskaidyta į funckijų ir į pagrindinį failą, sukurtas antraščių failas, pridėtas klaidos išvedimas neradus failo.
 * [v0.4](https://github.com/gustaz/Pazymys-skaiciuokle/releases/tag/v0.4) Kodas optimizuotas, pridėtas studentų grupavimas į dvi kategorijas ir išvedimas į failus.
 * [v0.4.1](https://github.com/gustaz/Pazymys-skaiciuokle/releases/tag/v0.4.1) Pridėtas dar vienas skaičiavimų trukmės išvedimas, įvedimas ir išvedimas perkelti į subaplankalus tam, kad būtų palaikoma tvarka.
-* [v0.4.2](https://github.com/gustaz/Pazymys-skaiciuokle/releases/tag/v0.4.2) Pridėtas spartos tikrinimo kelias, kodo refaktorizacija ir optimizavimas.
+* [v0.4.2](https://github.com/gustaz/Pazymys-skaiciuokle/releases/tag/v0.4.2) Pridėtas spartos tikrinimo kelias,  kodo refaktorizacija ir optimizavimas.
+* [v0.5] (https://github.com/gustaz/Pazymys-skaiciuokle/releases/tag/v0.5) Pridėtas funkcionalumas su deque ir list, perėjimas prie template funkcijų, pridėti paleidimo argumentai.
