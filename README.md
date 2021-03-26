@@ -21,7 +21,7 @@ g++ vectors.cpp functions.cpp -o skaiciuokle
 ## Programos naudojimas
 Naudojimas
 1. Paleidus vykdomąjį failą atidaromas komandinės eilutės langas ir vartotojas gali naviguoti laikydamasis programos numatytos eigos.
-2. Leidžiama pasirinkti programos vykdymo eigą.
+2. Leidžiama pasirinkti programos vykdymo eigą paleidžiant failą - programai davus parametrus vector, list, deque arba betkokią šių trijų kombinaciją bus vykdoma spartos tikrinimo eiga su būtent šių tipų konteineriais. Kitais atvejais, kai pasirenkami netinkami parametrai arba jie nepasirenkami, programa pereina prie įprastos vykdymo eigos.
 3. Pasirinkus spartos tikrinimo eigą, nieko daryti nereikia - programa pati automatiškai toliau viską atliks.
 4. Pasirinkus įprastinę tvarką leidžiama pasirinkti, ar norima generuoti duomenis.
 6. Vėliau leidžiama pasirinkti, ar vartotojas nori įvedimą daryti iš failo. 
