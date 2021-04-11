@@ -65,10 +65,8 @@ AMD Ryzen 5-3550H, 2.1GHz Quad-core, 16GB DDR4 2333MHz RAM, NVMe SSD.
 
 ## Programoje esančių dviejų strategijų spartos tikrinimas
 
-| Konteineris              | 1 000   | 10 000  | 100 000   | 1 000 000  | 10 000 000   |
+| ***Vector***             | 1 000   | 10 000  | 100 000   | 1 000 000  | 10 000 000   |
 | ------------------------ | ------- | ------- | --------- | ---------- | ------------ |
-| ***Vector***             |         |         |           |            |              |
-|                          |         |         |           |            |              |
 | **Atminties naudojimas** |         |         |           |            |              |
 |                          |         |         |           |            |              |
 | Vieno konteinerio        | 0.093MB | 0.136MB |  8.544MB  | 83.756MB   |   838.762MB  |
@@ -81,10 +79,8 @@ AMD Ryzen 5-3550H, 2.1GHz Quad-core, 16GB DDR4 2333MHz RAM, NVMe SSD.
 | Dviejų konteinerių       | 0.001s  | 0.032s  | 0.302s    | 3.918s     |  43.976s     |
 | Skirtumas                | 0.001s  | 0.005s  | 0.111s    | 1.270s     |  24.474s     |
 
-| Konteineris              | 1 000   | 10 000  | 100 000   | 1 000 000  | 10 000 000   |
+| ***Deque***              | 1 000   | 10 000  | 100 000   | 1 000 000  | 10 000 000   |
 | ------------------------ | ------- | ------- | --------- | ---------- | ------------ |
-| ***Deque***              |         |         |           |            |              |
-|                          |         |         |           |            |              |
 | **Atminties naudojimas** |         |         |           |            |              |
 |                          |         |         |           |            |              |
 | Vieno konteinerio        | 0.121MB | 0.625MB | 10.746MB  | 88.343MB   |   873.031MB  |
@@ -97,10 +93,8 @@ AMD Ryzen 5-3550H, 2.1GHz Quad-core, 16GB DDR4 2333MHz RAM, NVMe SSD.
 | Dviejų konteinerių       | 0.0028s | 0.043s  | 0.653s    | 5.669s     |  72.471s     |
 | Skirtumas                | 0.0005s | 0.014s  | 0.066s    | 0.553s     |   6.794s     |
 
-| Konteineris              | 1 000   | 10 000  | 100 000   | 1 000 000  | 10 000 000   |
+| ***List***               | 1 000   | 10 000  | 100 000   | 1 000 000  | 10 000 000   |
 | ------------------------ | ------- | ------- | --------- | ---------- | ------------ |
-| ***List***               |         |         |           |            |              |
-|                          |         |         |           |            |              |
 | **Atminties naudojimas** |         |         |           |            |              |
 |                          |         |         |           |            |              |
 | Vieno konteinerio        | 0.101MB | 0.781MB | 10.539MB  |  99.308MB  |   977.425MB  |
@@ -123,10 +117,8 @@ Dviejų konteinerių metodas išlošia priešingu atveju - kai laikas svarbu ir 
 *Jei prie skirtumo parašyta +, tai reiškia, jog pritaikytas optimizacijos metodas naudojo papildomai resursų.*
 *Jei prie skirtumo parašyta -, tai reiškia, jog pritaikytas optimizacijos metodas naudojo mažiau resursų.*
 
-| Konteineris                                      | 1 000      | 10 000   | 100 000   | 1 000 000   | 10 000 000   |
+| ***Vector***                                     | 1 000      | 10 000   | 100 000   | 1 000 000   | 10 000 000   |
 | ------------------------------------------------ | ---------- | -------- | --------- | ----------- | ------------ |
-| ***Vector***                                     |            |          |           |             |              |
-|                                                  |            |          |           |             |              |
 | **Atminties naudojimas**                         |            |          |           |             |              |
 |                                                  |            |          |           |             |              |
 | Taikant stable_partition                         |  0.109MB   | 0.625MB  |  6.242MB  |  62.324MB   |   623.113MB  |
@@ -137,10 +129,8 @@ Dviejų konteinerių metodas išlošia priešingu atveju - kai laikas svarbu ir 
 | Taikant stable_partition                         | 0.001s     | 0.032s   | 0.281s    | 3.513s      |  43.847s     |
 | Skirtumas palyginus su dviejų konteinerių metodu | 0.000s     | 0.000s   | -0.021s   | -0.405s     |  -0.129s     |
 
-| Konteineris                                      | 1 000      | 10 000   | 100 000   | 1 000 000   | 10 000 000   |
+| ***Deque***                                      | 1 000      | 10 000   | 100 000   | 1 000 000   | 10 000 000   |
 | ------------------------------------------------ | ---------- | -------- | --------- | ----------- | ------------ |
-| ***Deque***                                      |            |          |           |             |              |
-|                                                  |            |          |           |             |              |
 | **Atminties naudojimas**                         |            |          |           |             |              |
 |                                                  |            |          |           |             |              |
 | Taikant stable_partition                         | 0.500MB    | 0.515MB  |  5.895MB  |  39.382MB   |    43.328MB  |
@@ -151,10 +141,8 @@ Dviejų konteinerių metodas išlošia priešingu atveju - kai laikas svarbu ir 
 | Taikant stable_partition                         | 0.0029s    | 0.050s   | 0.368s    | 5.513s      |  67.559s     |
 | Skirtumas palyginus su dviejų konteinerių metodu | +0.006s    | +0.007s  | -0.285s   | -0.156s     |  -11.706s    |
 
-| Konteineris                                      | 1 000      | 10 000   | 100 000   | 1 000 000   | 10 000 000   |
+| ***List***                                       | 1 000      | 10 000   | 100 000   | 1 000 000   | 10 000 000   |
 | ------------------------------------------------ | ---------- | -------- | --------- | ----------- | ------------ |
-| ***List***                                       |            |          |           |             |              |
-|                                                  |            |          |           |             |              |
 | **Atminties naudojimas**                         |            |          |           |             |              |
 |                                                  |            |          |           |             |              |
 | Taikant stable_partition                         | 0.121MB    | 0.750MB  | 12.371MB  |  20.433MB   |    65.132MB  |
