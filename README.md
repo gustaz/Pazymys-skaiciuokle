@@ -46,12 +46,16 @@ Naudojimas
 | Nuskaitymas                           | 0.021s   | 0.115s | 1.120s  | 11.738s   | 114.629s   |
 | Išrūšiavimas                          | 0.002s   | 0.030s | 0.407s  |  4.865s   |  58.336s   |
 | Išvedimas                             | 0.026s   | 0.044s | 0.204s  |  1.919s   |  18.882s   |
-|                                       |          |        |         |           |            |
+
+| Konteineris                           | 1 000    | 10 000 | 100 000 | 1 000 000 | 10 000 000 |
+| ------------------------------------- | -------- | ------ | ------- | --------- | ---------- |
 | **Deque** (bendras vykdymo laikas)    | 0.034s   | 0.193s | 1.875s  | 19.673s   | 207.906s   |
 | Nuskaitymas                           | 0.011s   | 0.112s | 1.181s  | 11.435s   | 114.040s   |
 | Išrūšiavimas                          | 0.003s   | 0.040s | 0.487s  |  6.255s   |  74.644s   |
 | Išvedimas                             | 0.019s   | 0.040s | 0.207s  |  1.981s   |  19.221s   |
-|                                       |          |        |         |           |            |
+
+| Konteineris                           | 1 000    | 10 000 | 100 000 | 1 000 000 | 10 000 000 |
+| ------------------------------------- | -------- | ------ | ------- | --------- | ---------- |
 | **List** (bendras vykdymo laikas)     | 0.034s   | 0.169s | 1.616s  | 16.964s   | 180.331s   |
 | Nuskaitymas                           | 0.011s   | 0.116s | 1.130s  | 11.553s   | 116.246s   |
 | Išrūšiavimas                          | 0.001s   | 0.015s | 0.254s  |  3.320s   |  44.200s   |
@@ -76,7 +80,9 @@ AMD Ryzen 5-3550H, 2.1GHz Quad-core, 16GB DDR4 2333MHz RAM, NVMe SSD.
 | Vieno konteinerio        | 0.002s  | 0.037s  | 0.413s    | 5.188s     |  71.450s     |
 | Dviejų konteinerių       | 0.001s  | 0.032s  | 0.302s    | 3.918s     |  43.976s     |
 | Skirtumas                | 0.001s  | 0.005s  | 0.111s    | 1.270s     |  24.474s     |
-|                          |         |         |           |            |              |
+
+| Konteineris              | 1 000   | 10 000  | 100 000   | 1 000 000  | 10 000 000   |
+| ------------------------ | ------- | ------- | --------- | ---------- | ------------ |
 | ***Deque***              |         |         |           |            |              |
 |                          |         |         |           |            |              |
 | **Atminties naudojimas** |         |         |           |            |              |
@@ -90,7 +96,9 @@ AMD Ryzen 5-3550H, 2.1GHz Quad-core, 16GB DDR4 2333MHz RAM, NVMe SSD.
 | Vieno konteinerio        | 0.0023s | 0.057s  | 0.719s    | 6.222s     |  79.265s     |
 | Dviejų konteinerių       | 0.0028s | 0.043s  | 0.653s    | 5.669s     |  72.471s     |
 | Skirtumas                | 0.0005s | 0.014s  | 0.066s    | 0.553s     |   6.794s     |
-|                          |         |         |           |            |              |
+
+| Konteineris              | 1 000   | 10 000  | 100 000   | 1 000 000  | 10 000 000   |
+| ------------------------ | ------- | ------- | --------- | ---------- | ------------ |
 | ***List***               |         |         |           |            |              |
 |                          |         |         |           |            |              |
 | **Atminties naudojimas** |         |         |           |            |              |
@@ -128,7 +136,9 @@ Dviejų konteinerių metodas išlošia priešingu atveju - kai laikas svarbu ir 
 |                                                  |            |          |           |             |              |
 | Taikant stable_partition                         | 0.001s     | 0.032s   | 0.281s    | 3.513s      |  43.847s     |
 | Skirtumas palyginus su dviejų konteinerių metodu | 0.000s     | 0.000s   | -0.021s   | -0.405s     |  -0.129s     |
-|                                                  |            |          |           |             |              |
+
+| Konteineris                                      | 1 000      | 10 000   | 100 000   | 1 000 000   | 10 000 000   |
+| ------------------------------------------------ | ---------- | -------- | --------- | ----------- | ------------ |
 | ***Deque***                                      |            |          |           |             |              |
 |                                                  |            |          |           |             |              |
 | **Atminties naudojimas**                         |            |          |           |             |              |
@@ -140,7 +150,9 @@ Dviejų konteinerių metodas išlošia priešingu atveju - kai laikas svarbu ir 
 |                                                  |            |          |           |             |              |
 | Taikant stable_partition                         | 0.0029s    | 0.050s   | 0.368s    | 5.513s      |  67.559s     |
 | Skirtumas palyginus su dviejų konteinerių metodu | +0.006s    | +0.007s  | -0.285s   | -0.156s     |  -11.706s    |
-|                                                  |            |          |           |             |              |
+
+| Konteineris                                      | 1 000      | 10 000   | 100 000   | 1 000 000   | 10 000 000   |
+| ------------------------------------------------ | ---------- | -------- | --------- | ----------- | ------------ |
 | ***List***                                       |            |          |           |             |              |
 |                                                  |            |          |           |             |              |
 | **Atminties naudojimas**                         |            |          |           |             |              |
@@ -153,7 +165,7 @@ Dviejų konteinerių metodas išlošia priešingu atveju - kai laikas svarbu ir 
 | Taikant stable_partition                         | 0.00008s   |  0.009s  |   0.126s  |    1.319s   |     14.409s  |
 | Skirtumas palyginus su dviejų konteinerių metodu | -0.00102s  |  -0.002s |   -0.013s |    -0.149s  |     -4.01s   |
 
-**IŠVADA**: std::stable_partition iš esmės programai suteikė spartą, kuri buvo gaunama naudojant du konteinerius ir suteikė tą patį atminties optimizuotumą, kaip ir vieno konteinerio metodas. Kai kuriais atvejais sparta padidėjo netgi drastiškai, nes implementaicja pakeista iš template funkcijos, iteruojančios pro visą konteinerį, kuri buvo tam tikrais atvejais neefektyvi.
+**IŠVADA**: std::stable_partition iš esmės programai suteikė spartą, kuri buvo gaunama naudojant du konteinerius ir suteikė tą patį atminties optimizuotumą, kaip ir vieno konteinerio metodas. Kai kuriais atvejais efektyvumas padidėjo netgi drastiškai, nes implementaicja pakeista iš template funkcijos, iteruojančios pro visą konteinerį, kuri buvo tam tikrais atvejais neefektyvi.
 	
 ## Versijos
 * [v0.1](https://github.com/gustaz/Pazymys-skaiciuokle/releases/tag/v0.1) Įgyvendintas esminis funkcionalumas
