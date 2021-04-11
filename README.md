@@ -153,7 +153,7 @@ Dviejų konteinerių metodas išlošia priešingu atveju - kai laikas svarbu ir 
 | Taikant stable_partition                         | 0.00008s   |  0.009s  |   0.126s  |    1.319s   |     14.409s  |
 | Skirtumas palyginus su dviejų konteinerių metodu | -0.00102s  |  -0.002s |   -0.013s |    -0.149s  |     -4.01s   |
 
-**IŠVADA**: std::stable_partition iš esmės programai suteikė spartą, kuri buvo gaunama naudojant du konteinerius ir suteikė tą patį atminties optimizuotumą, kaip ir vieno konteinerio metodas.
+**IŠVADA**: std::stable_partition iš esmės programai suteikė spartą, kuri buvo gaunama naudojant du konteinerius ir suteikė tą patį atminties optimizuotumą, kaip ir vieno konteinerio metodas. Kai kuriais atvejais sparta padidėjo netgi drastiškai, nes implementaicja pakeista iš template funkcijos, iteruojančios pro visą konteinerį, kuri buvo tam tikrais atvejais neefektyvi.
 	
 ## Versijos
 * [v0.1](https://github.com/gustaz/Pazymys-skaiciuokle/releases/tag/v0.1) Įgyvendintas esminis funkcionalumas
