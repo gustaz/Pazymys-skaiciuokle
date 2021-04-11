@@ -63,7 +63,7 @@ AMD Ryzen 5-3550H, 2.1GHz Quad-core, 16GB DDR4 2333MHz RAM, NVMe SSD.
 
 | Konteineris              | 1 000   | 10 000  | 100 000   | 1 000 000  | 10 000 000   |
 | ------------------------ | ------- | ------- | --------- | ---------- | ------------ |
-| ****Vector***            |         |         |           |            |              |
+| ***Vector***            |         |         |           |            |              |
 |                          |         |         |           |            |              |
 | **Atminties naudojimas** |         |         |           |            |              |
 |                          |         |         |           |            |              |
@@ -77,7 +77,7 @@ AMD Ryzen 5-3550H, 2.1GHz Quad-core, 16GB DDR4 2333MHz RAM, NVMe SSD.
 | Dviejų konteinerių       | 0.001s  | 0.032s  | 0.302s    | 3.918s     |  43.976s     |
 | Skirtumas                | 0.001s  | 0.005s  | 0.111s    | 1.270s     |  24.474s     |
 |                          |         |         |           |            |              |
-| ****Deque***             |         |         |           |            |              |
+| ***Deque***             |         |         |           |            |              |
 |                          |         |         |           |            |              |
 | **Atminties naudojimas** |         |         |           |            |              |
 |                          |         |         |           |            |              |
