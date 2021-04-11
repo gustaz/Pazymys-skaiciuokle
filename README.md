@@ -59,11 +59,11 @@ Naudojimas
 
 AMD Ryzen 5-3550H, 2.1GHz Quad-core, 16GB DDR4 2333MHz RAM, NVMe SSD.
 
-## Programoje esančių algoritmų spartos tikrinimas
+## Programoje esančių dviejų strategijų spartos tikrinimas
 
 | Konteineris              | 1 000   | 10 000  | 100 000   | 1 000 000  | 10 000 000   |
 | ------------------------ | ------- | ------- | --------- | ---------- | ------------ |
-| ***Vector***            |         |         |           |            |              |
+| ***Vector***             |         |         |           |            |              |
 |                          |         |         |           |            |              |
 | **Atminties naudojimas** |         |         |           |            |              |
 |                          |         |         |           |            |              |
@@ -77,7 +77,7 @@ AMD Ryzen 5-3550H, 2.1GHz Quad-core, 16GB DDR4 2333MHz RAM, NVMe SSD.
 | Dviejų konteinerių       | 0.001s  | 0.032s  | 0.302s    | 3.918s     |  43.976s     |
 | Skirtumas                | 0.001s  | 0.005s  | 0.111s    | 1.270s     |  24.474s     |
 |                          |         |         |           |            |              |
-| ***Deque***             |         |         |           |            |              |
+| ***Deque***              |         |         |           |            |              |
 |                          |         |         |           |            |              |
 | **Atminties naudojimas** |         |         |           |            |              |
 |                          |         |         |           |            |              |
@@ -109,6 +109,46 @@ AMD Ryzen 5-3550H, 2.1GHz Quad-core, 16GB DDR4 2333MHz RAM, NVMe SSD.
 
 Vieno konteinerio metodas išlošia tada, kai laikas nėra svarbu, o atmintis - ribota.
 Dviejų konteinerių metodas išlošia priešingu atveju - kai laikas svarbu ir atmintis - nėra ribota.
+
+## Po stable_partition optimizacijos metodo pritaikymo vykdytas spartos tikrinimas
+
+| Konteineris                                      | 1 000      | 10 000   | 100 000   | 1 000 000   | 10 000 000   |
+| ------------------------------------------------ | ---------- | -------- | --------- | ----------- | ------------ |
+| ***Vector***                                     |            |          |           |             |              |
+|                                                  |            |          |           |             |              |
+| **Atminties naudojimas**                         |            |          |           |             |              |
+|                                                  |            |          |           |             |              |
+| Taikant stable_partition                         |  0.109MB   | 0.625MB  |  6.242MB  |  62.324MB   |   623.113MB  |
+| Skirtumas palyginus su vieno konteinerio metodu  | +0.016MB   | +0.489MB | -2.302MB  | -25.432MB   |  -215.649MB  |
+|                                                  |            |          |           |             |              |
+| **Laiko naudojimas**                             |            |          |           |             |              |
+|                                                  |            |          |           |             |              |
+| Taikant stable_partition                         | 0.001s     | 0.032s   | 0.281s    | 3.513s      |  43.847s     |
+| Skirtumas palyginus su dviejų konteinerių metodu | 0.000s     | 0.000s   | -0.021s   | -0.405s     |  -0.129s     |
+|                                                  |            |          |           |             |              |
+| ***Deque***                                      |            |          |           |             |              |
+|                                                  |            |          |           |             |              |
+| **Atminties naudojimas**                         |            |          |           |             |              |
+|                                                  |            |          |           |             |              |
+| Taikant stable_partition                         | 0.500MB    | 0.515MB  |  5.895MB  |  39.382MB   |    43.328MB  |
+| Skirtumas palyginus su vieno konteinerio metodu  | +0.379MB   | -0.11MB  | -4.851MB  | -48.961MB   |  -829.703MB  |
+|                                                  |            |          |           |             |              |
+| **Laiko naudojimas**                             |            |          |           |             |              |
+|                                                  |            |          |           |             |              |
+| Taikant stable_partition                         | 0.0029s    | 0.050s   | 0.368s    | 5.513s      |  67.559s     |
+| Skirtumas palyginus su dviejų konteinerių metodu | +0.006s    | +0.007s  | -0.285s   | -0.156s     |  -11.706s    |
+|                                                  |            |          |           |             |              |
+| ***List***                                       |            |          |           |             |              |
+|                                                  |            |          |           |             |              |
+| **Atminties naudojimas**                         |            |          |           |             |              |
+|                                                  |            |          |           |             |              |
+| Taikant stable_partition                         | 0.121MB    | 0.750MB  | 12.371MB  |  20.433MB   |    65.132MB  |
+| Skirtumas palyginus su vieno konteinerio metodu  | +0.020MB   | +0.031MB | +1.832MB  | -78.875MB   |  -912.293MB  |
+|                                                  |            |          |           |             |              |
+| **Laiko naudojimas**                             |            |          |           |             |              |
+|                                                  |            |          |           |             |              |
+| Taikant stable_partition                         | 0.00008s   |  0.009s  |   0.126s  |    1.319s   |     14.409s  |
+| Skirtumas palyginus su dviejų konteinerių metodu | -0.00102s  |  -0.002s |   -0.013s |    -0.149s  |     -4.01s   |
 	
 ## Versijos
 * [v0.1](https://github.com/gustaz/Pazymys-skaiciuokle/releases/tag/v0.1) Įgyvendintas esminis funkcionalumas

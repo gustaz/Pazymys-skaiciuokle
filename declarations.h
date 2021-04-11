@@ -53,6 +53,10 @@ inline bool fileExists(const std::string& name) {
 	return f.good();
 }
 
+inline bool isKietiakas(const Studentas& struct1) {
+	return struct1.galutinisVid <= 5.00;
+}
+
 auto static nowForSeed = std::chrono::high_resolution_clock::now();
 auto static timeInMSForSeed = std::chrono::duration_cast<std::chrono::milliseconds>(nowForSeed.time_since_epoch()).count();
 
@@ -390,31 +394,6 @@ void workFlow(T& studentai, int studentuFailuDydziai, std::ifstream& input, std:
 	readFromFileAutomated(studentai, studentuFailuDydziai, input);
 	benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
 	std::cout << studentuFailuDydziai << " studentu failo nuskaitymas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
-}
-
-template <class T>
-void sortIntoSlow(T& studentai, T& kietiakai, T& vargsiukai, int studentuFailuDydziai)
-{
-	for (auto it = studentai.begin(); it != studentai.end(); ++it)
-	{
-		if (it->galutinisVid >= 5.00)
-			kietiakai.push_back(*it);
-		else vargsiukai.push_back(*it);
-	}
-}
-
-template <class T>
-void sortIntoPreferred(T& studentai, T& vargsiukai, int studentuFailuDydziai)
-{
-	for (auto it = studentai.begin(); it != studentai.end(); ++it)
-	{
-		if (it->galutinisVid >= 5.00)
-		{
-			vargsiukai.assign(studentai.begin(), it);
-			studentai.erase(studentai.begin(), it);
-			break;
-		}
-	}
 }
 
 template <class T>
