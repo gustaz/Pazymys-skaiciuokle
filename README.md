@@ -16,12 +16,12 @@
 g++ main.cpp functions.cpp -o skaiciuokle
 ```
 3. Gautą vykdomąjį failą paleisti:
-    3.1 Naudojant paleidimo argumentus:
-        3.1.1 vector - Darbui su vector konteineriu;
-        3.1.2 deque - Darbui su deque konteineriu;
-        3.1.3 list - Darbui su list konteineriu;
-        3.1.4 generate - Failu sugeneravimui vykdyti;
-    3.2 Nenaudojant paleidimo argumentu programa pereis prie iprastines, ne spartos bandymams vykdyti, veiklos.
+    1. Naudojant paleidimo argumentus:
+        1. vector - Darbui su vector konteineriu;
+        2. deque - Darbui su deque konteineriu;
+        3. list - Darbui su list konteineriu;
+        4. generate - Failu sugeneravimui vykdyti;
+    2. Nenaudojant paleidimo argumentu programa pereis prie iprastines, ne spartos bandymams vykdyti, veiklos.
 	
 ## Programos naudojimas
 Naudojimas
