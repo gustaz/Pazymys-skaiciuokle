@@ -110,7 +110,10 @@ AMD Ryzen 5-3550H, 2.1GHz Quad-core, 16GB DDR4 2333MHz RAM, NVMe SSD.
 Vieno konteinerio metodas išlošia tada, kai laikas nėra svarbu, o atmintis - ribota.
 Dviejų konteinerių metodas išlošia priešingu atveju - kai laikas svarbu ir atmintis - nėra ribota.
 
-## Po stable_partition optimizacijos metodo pritaikymo vykdytas spartos tikrinimas
+## Po std::stable_partition optimizacijos metodo pritaikymo vykdytas spartos tikrinimas
+
+*Jei prie skirtumo parašyta +, tai reiškia, jog pritaikytas optimizacijos metodas naudojo papildomai resursų.*
+*Jei prie skirtumo parašyta -, tai reiškia, jog pritaikytas optimizacijos metodas naudojo mažiau resursų.*
 
 | Konteineris                                      | 1 000      | 10 000   | 100 000   | 1 000 000   | 10 000 000   |
 | ------------------------------------------------ | ---------- | -------- | --------- | ----------- | ------------ |
@@ -149,6 +152,8 @@ Dviejų konteinerių metodas išlošia priešingu atveju - kai laikas svarbu ir 
 |                                                  |            |          |           |             |              |
 | Taikant stable_partition                         | 0.00008s   |  0.009s  |   0.126s  |    1.319s   |     14.409s  |
 | Skirtumas palyginus su dviejų konteinerių metodu | -0.00102s  |  -0.002s |   -0.013s |    -0.149s  |     -4.01s   |
+
+**IŠVADA**: std::stable_partition iš esmės programai suteikė spartą, kuri buvo gaunama naudojant du konteinerius ir suteikė tą patį atminties optimizuotumą, kaip ir vieno konteinerio metodas.
 	
 ## Versijos
 * [v0.1](https://github.com/gustaz/Pazymys-skaiciuokle/releases/tag/v0.1) Įgyvendintas esminis funkcionalumas
