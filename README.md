@@ -90,13 +90,11 @@ SSD: NVMe SSD.
 | ***Vector***             | 1 000   | 10 000  | 100 000   | 1 000 000  | 10 000 000   |
 | ------------------------ | ------- | ------- | --------- | ---------- | ------------ |
 | **Atminties naudojimas** |         |         |           |            |              |
-|                          |         |         |           |            |              |
 | Vieno konteinerio        | 0.093MB | 0.136MB |  8.544MB  | 83.756MB   |   838.762MB  |
 | Dviejų konteinerių       | 0.144MB | 3.525MB | 23.609MB  | 263.655MB  |  2297.112MB  |
 | Skirtumas                | 0.051MB | 3.389MB | 15.065MB  | 179.899MB  |  1458.350MB  |
 |                          |         |         |           |            |              |
 | **Laiko naudojimas**     |         |         |           |            |              |
-|                          |         |         |           |            |              |
 | Vieno konteinerio        | 0.002s  | 0.037s  | 0.413s    | 5.188s     |  71.450s     |
 | Dviejų konteinerių       | 0.001s  | 0.032s  | 0.302s    | 3.918s     |  43.976s     |
 | Skirtumas                | 0.001s  | 0.005s  | 0.111s    | 1.270s     |  24.474s     |
@@ -104,13 +102,11 @@ SSD: NVMe SSD.
 | ***Deque***              | 1 000   | 10 000  | 100 000   | 1 000 000  | 10 000 000   |
 | ------------------------ | ------- | ------- | --------- | ---------- | ------------ |
 | **Atminties naudojimas** |         |         |           |            |              |
-|                          |         |         |           |            |              |
 | Vieno konteinerio        | 0.121MB | 0.625MB | 10.746MB  | 88.343MB   |   873.031MB  |
 | Dviejų konteinerių       | 0.250MB | 2.125MB | 30.089MB  | 218.039MB  |  2120.707MB  |
 | Skirtumas                | 0.129MB | 1.500MB | 19.343MB  | 129.695MB  |  1247.675MB  |
 |                          |         |         |           |            |              |
 | **Laiko naudojimas**     |         |         |           |            |              |
-|                          |         |         |           |            |              |
 | Vieno konteinerio        | 0.0023s | 0.057s  | 0.719s    | 6.222s     |  79.265s     |
 | Dviejų konteinerių       | 0.0028s | 0.043s  | 0.653s    | 5.669s     |  72.471s     |
 | Skirtumas                | 0.0005s | 0.014s  | 0.066s    | 0.553s     |   6.794s     |
@@ -118,13 +114,11 @@ SSD: NVMe SSD.
 | ***List***               | 1 000   | 10 000  | 100 000   | 1 000 000  | 10 000 000   |
 | ------------------------ | ------- | ------- | --------- | ---------- | ------------ |
 | **Atminties naudojimas** |         |         |           |            |              |
-|                          |         |         |           |            |              |
 | Vieno konteinerio        | 0.101MB | 0.781MB | 10.539MB  |  99.308MB  |   977.425MB  |
 | Dviejų konteinerių       | 0.242MB | 2.312MB | 24.750MB  | 239.164MB  |  2355.082MB  |
 | Skirtumas                | 0.141MB | 1.531MB | 14.210MB  | 139.855MB  |  1377.656MB  |
 |                          |         |         |           |            |              |
 | **Laiko naudojimas**     |         |         |           |            |              |
-|                          |         |         |           |            |              |
 | Vieno konteinerio        | 0.0015s | 0.022s  | 0.255s    | 3.568s     |  59.181s     |
 | Dviejų konteinerių       | 0.0011s | 0.011s  | 0.139s    | 1.468s     |  38.419s     |
 | Skirtumas                | 0.0004s | 0.011s  | 0.116s    | 2.100s     |  20.762s     |
@@ -142,36 +136,30 @@ Dviejų konteinerių metodas išlošia priešingu atveju - kai laikas svarbu ir 
 | ***Vector***                                     | 1 000      | 10 000   | 100 000   | 1 000 000   | 10 000 000   |
 | ------------------------------------------------ | ---------- | -------- | --------- | ----------- | ------------ |
 | **Atminties naudojimas**                         |            |          |           |             |              |
-|                                                  |            |          |           |             |              |
 | Taikant std::partition                           |  0.046MB   | 0.449MB  |  4.472MB  |  44.359MB   |   443.621MB  |
 | Skirtumas palyginus su vieno konteinerio metodu  | -0.047MB   | +0.313MB | -4.072MB  | -39.397MB   |  -385.141MB  |
 |                                                  |            |          |           |             |              |
 | **Laiko naudojimas**                             |            |          |           |             |              |
-|                                                  |            |          |           |             |              |
 | Taikant std::partition                           | 0.001s     | 0.019s   | 0.223s    | 2.851s      |  30.798s     |
 | Skirtumas palyginus su dviejų konteinerių metodu | 0.000s     | -0.013s  | -0.079s   | -1.067s     |  -13.178s    |
 
 | ***Deque***                                      | 1 000      | 10 000   | 100 000   | 1 000 000   | 10 000 000   |
 | ------------------------------------------------ | ---------- | -------- | --------- | ----------- | ------------ |
 | **Atminties naudojimas**                         |            |          |           |             |              |
-|                                                  |            |          |           |             |              |
 | Taikant std::partition                           | 0.562MB    | 0.515MB  |  5.895MB  |  39.382MB   |   543.328MB  |
 | Skirtumas palyginus su vieno konteinerio metodu  | +0.441MB   | -0.110MB | -4.851MB  | -48.961MB   |  -329.703MB  |
 |                                                  |            |          |           |             |              |
 | **Laiko naudojimas**                             |            |          |           |             |              |
-|                                                  |            |          |           |             |              |
 | Taikant std::partition                           | 0.001s     | 0.050s   | 0.368s    | 5.513s      |  67.559s     |
-| Skirtumas palyginus su dviejų konteinerių metodu | -0.001s    | +0.007s  | -0.285s   | -0.156s     |  -4.912s    |
+| Skirtumas palyginus su dviejų konteinerių metodu | -0.001s    | +0.007s  | -0.285s   | -0.156s     |  -4.912s     |
 
 | ***List***                                       | 1 000      | 10 000   | 100 000   | 1 000 000   | 10 000 000   |
 | ------------------------------------------------ | ---------- | -------- | --------- | ----------- | ------------ |
 | **Atminties naudojimas**                         |            |          |           |             |              |
-|                                                  |            |          |           |             |              |
 | Taikant std::partition                           | 0.121MB    | 0.750MB  | 12.371MB  |  50.433MB   |   565.132MB  |
 | Skirtumas palyginus su vieno konteinerio metodu  | +0.020MB   | +0.031MB | +1.832MB  | -48.875MB   |  -412.293MB  |
 |                                                  |            |          |           |             |              |
 | **Laiko naudojimas**                             |            |          |           |             |              |
-|                                                  |            |          |           |             |              |
 | Taikant std::partition                           | 0.00008s   |  0.009s  |   0.126s  |    1.319s   |     34.409s  |
 | Skirtumas palyginus su dviejų konteinerių metodu | -0.00102s  |  -0.002s |   -0.013s |    -0.149s  |     -4.01s   |
 
