@@ -35,14 +35,13 @@ cmake --build .
         2. deque - Darbui su deque konteineriu;
         3. list - Darbui su list konteineriu;
         4. generate - Failu sugeneravimui vykdyti;
-        Naudojimo pavyzdys:
-        ```sh
-        pazymiu-skaiciuokle generate vector deque 
-        ```
     2. Nenaudojant paleidimo argumentu programa pereis prie įprastines, ne spartos bandymams vykdyti, veiklos.
 	
 ## Programos naudojimas
-Naudojimas
+Naudojimo pavyzdys:
+```sh
+pazymiu-skaiciuokle generate vector deque 
+```
 1. Paleidus vykdomąjį failą programa tikrina, ar yra paleidimo parametrai. 
 2. Jei programa aptinka parametrus:
     1. Nieko toliau daryti nereikia, programa viską darys automatizuotai.
