@@ -1,7 +1,7 @@
 all: functions main compile clean
 
 compile: functions.o main.o
-	g++ -o programa main.o functions.o -lpsapi
+	g++ -o pazymiu-skaiciuokle main.o functions.o
 
 functions: 
 	g++ -c functions.cpp

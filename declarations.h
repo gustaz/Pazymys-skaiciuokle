@@ -48,13 +48,17 @@ struct compGrade
 	}
 };
 
+struct isKietiakas
+{
+	inline bool operator() (const Studentas& struct1)
+	{
+		return (struct1.galutinisVid >= 5.00);
+	}
+};
+
 inline bool fileExists(const std::string& name) {
 	std::ifstream f(name.c_str());
 	return f.good();
-}
-
-inline bool isKietiakas(const Studentas& struct1) {
-	return struct1.galutinisVid <= 5.00;
 }
 
 auto static nowForSeed = std::chrono::high_resolution_clock::now();

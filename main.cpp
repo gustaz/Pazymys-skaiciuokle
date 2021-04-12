@@ -1,6 +1,4 @@
 #include "declarations.h"
-#include "windows.h"
-#include "psapi.h"
 
 double accumulatedTime = 0;
 
@@ -68,17 +66,10 @@ int main(int argc, char* argv[])
 
 						workFlow(studentai, studentuFailuDydziai[j], input, output, argv[i], benchmarkTime);
 
-						PROCESS_MEMORY_COUNTERS_EX pmc;
-						GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc));
-						SIZE_T virtualMemUsedByMe = pmc.PrivateUsage;
-						double mem = virtualMemUsedByMe;
-						double base = mem;
-						std::cout << "Naudojama atmintis: " << mem / 1024 / 1024 << "MB" << std::endl;
-
 						std::cout << "Vykdomas studentu rusiavimas pagal galutini ivertinima." << std::endl;
 						clockStart = std::chrono::steady_clock::now();
 
-						auto it = std::stable_partition(studentai.begin(), studentai.end(), isKietiakas);
+						auto it = std::partition(studentai.begin(), studentai.end(), isKietiakas());
 						std::vector<Studentas> vargsiukai(std::make_move_iterator(it), std::make_move_iterator(studentai.end()));
 						studentai.erase(it, studentai.end());
 
@@ -88,13 +79,6 @@ int main(int argc, char* argv[])
 						std::cout << "Studentu rusiavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
 						benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
 
-						GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc));
-						virtualMemUsedByMe = pmc.PrivateUsage;
-						mem = virtualMemUsedByMe;
-						double afterAlgorithm = mem;
-						std::cout << "Naudojama atmintis: " << mem / 1024 / 1024 << "MB" << std::endl;
-						std::cout << "Sis algoritmas isnaudojo " << (afterAlgorithm - base) / 1024 / 1024 << " MB" << std::endl;
-
 						thenPrint(studentai, vargsiukai, studentuFailuDydziai[j], output, benchmarkTime, argv[i]);
 					}
 					else if (strcmp(argv[i], "deque") == 0)
@@ -103,17 +87,10 @@ int main(int argc, char* argv[])
 
 						workFlow(studentai, studentuFailuDydziai[j], input, output, argv[i], benchmarkTime);
 
-						PROCESS_MEMORY_COUNTERS_EX pmc;
-						GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc));
-						SIZE_T virtualMemUsedByMe = pmc.PrivateUsage;
-						double mem = virtualMemUsedByMe;
-						double base = mem;
-						std::cout << "Naudojama atmintis: " << mem / 1024 / 1024 << "MB" << std::endl;
-
 						std::cout << "Vykdomas studentu rusiavimas pagal galutini ivertinima." << std::endl;
 						clockStart = std::chrono::steady_clock::now();
 
-						auto it = std::stable_partition(studentai.begin(), studentai.end(), isKietiakas);
+						auto it = std::partition(studentai.begin(), studentai.end(), isKietiakas());
 						std::deque<Studentas> vargsiukai(std::make_move_iterator(it), std::make_move_iterator(studentai.end()));
 						studentai.erase(it, studentai.end());
 
@@ -122,14 +99,6 @@ int main(int argc, char* argv[])
 
 						std::cout << "Studentu rusiavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
 						benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
-
-						GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc));
-						virtualMemUsedByMe = pmc.PrivateUsage;
-						mem = virtualMemUsedByMe;
-						double afterAlgorithm = mem;
-						std::cout << "Naudojama atmintis: " << mem / 1024 / 1024 << "MB" << std::endl;
-						std::cout << "Sis algoritmas isnaudojo " << (afterAlgorithm - base) / 1024 / 1024 << " MB" << std::endl;
-
 						thenPrint(studentai, vargsiukai, studentuFailuDydziai[j], output, benchmarkTime, argv[i]);
 					}
 					else if (strcmp(argv[i], "list") == 0)
@@ -138,32 +107,18 @@ int main(int argc, char* argv[])
 
 						workFlow(studentai, studentuFailuDydziai[j], input, output, argv[i], benchmarkTime);
 
-						PROCESS_MEMORY_COUNTERS_EX pmc;
-						GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc));
-						SIZE_T virtualMemUsedByMe = pmc.PrivateUsage;
-						double mem = virtualMemUsedByMe;
-						double base = mem;
-						std::cout << "Naudojama atmintis: " << mem / 1024 / 1024 << "MB" << std::endl;
-
 						std::cout << "Vykdomas studentu rusiavimas pagal galutini ivertinima." << std::endl;
 						clockStart = std::chrono::steady_clock::now();
 						
-						auto it = std::stable_partition(studentai.begin(), studentai.end(), isKietiakas);
+						auto it = std::partition(studentai.begin(), studentai.end(), isKietiakas());
 						std::list<Studentas> vargsiukai (std::make_move_iterator(it), std::make_move_iterator(studentai.end()));
 						studentai.erase(it, studentai.end());
 
 						studentai.sort(compSurname());
-						studentai.sort(compSurname());
+						vargsiukai.sort(compSurname());
 
 						std::cout << "Studentu rusiavimas truko: " << std::fixed << std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count() << "s" << std::endl;
 						benchmarkTime += std::chrono::duration<double>(std::chrono::steady_clock::now() - clockStart).count();
-
-						GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc));
-						virtualMemUsedByMe = pmc.PrivateUsage;
-						mem = virtualMemUsedByMe;
-						double afterAlgorithm = mem;
-						std::cout << "Naudojama atmintis: " << mem / 1024 / 1024 << "MB" << std::endl;
-						std::cout << "Sis algoritmas isnaudojo " << (afterAlgorithm - base) / 1024 / 1024 << " MB" << std::endl;
 
 						thenPrint(studentai, vargsiukai, studentuFailuDydziai[j], output, benchmarkTime, argv[i]);
 					}

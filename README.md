@@ -12,8 +12,22 @@
 ## Programos diegimas
 1. Parsisiųsti norimą programos versijos kodą iš releases;
 2. Kodą sukompiliuoti per komandinę eilutę arba pasirinktą IDE;
+Rankiniu būdu:
 ```sh
 g++ main.cpp functions.cpp -o skaiciuokle
+```
+Naudojant Makefile per Windows su mingw32-make:
+```sh
+mingw32-make -f MakeFileWin
+```
+Naudojant MacOS, Linux, ar kitą UNIX sistemą:
+```sh
+make -f MakeFile
+```
+Naudojant CMakeLists.txt:
+```sh
+cmake .
+cmake --build .
 ```
 3. Gautą vykdomąjį failą paleisti:
     1. Naudojant paleidimo argumentus:
@@ -26,19 +40,29 @@ g++ main.cpp functions.cpp -o skaiciuokle
 ## Programos naudojimas
 Naudojimas
 1. Paleidus vykdomąjį failą programa tikrina, ar yra paleidimo parametrai. 
-2. Jei parametrai neįvedami, programa pereina prie įprastinės veiklos.
-3. Pasirinkus spartos tikrinimo eigą, nieko daryti nereikia - programa pati automatiškai toliau viską atliks.
-4. Pasirinkus įprastinę tvarką leidžiama pasirinkti, ar norima generuoti duomenis.
-6. Vėliau leidžiama pasirinkti, ar vartotojas nori įvedimą daryti iš failo. 
-7. Baigus ar nepasirinkus įvedimą iš failo taip pat galima pasirinkti ir įvedimą rankiniui būdu. Įvedus vardą, pavardę, duodama pasirinkti pažymių įvedimo būdą (generacija, įvedimas rankiniu būdu).
-8. Suvedus visus duomenis vartotojo paklausiama, ar jis nori pridėti dar vieną studentą. Jei taip, kartojami žingsniai 7-8.
-9. Jei ne, vartotojo paklausiama, ar jis nori išvestį išskirti į du failus.
-10. Pasirinkus taip, išvestis pateikiama dvejuose failuose, pagal pasirinkimą rodomas galutinis pažymys paskaičiuotas su vidurkiu arba mediana.
-11. Jei ne, išvestis vykdoma komandinėje eilutėje ir taip pat pagal pasirinkimą rodomas galutinis pažymys paskaičiuotas su vidurkiu arba mediana.
-12. Pagal atitinkamą vartotojo pasirinkimą parodoma lentelė komandinėje eilutėje arba pateikiama išvestis.
+2. Jei programa aptinka parametrus:
+    1. Nieko toliau daryti nereikia, programa viską darys automatizuotai.
+    2. Jei nebus aptikti duomenys ir atitinkami aplankalai, programa juos sugeneruos.
+    3. Priklausomai nuo paleidimo parametrų, programa atliks veiksmus su vienu, dviem ar visais trim konteinerių tipais.
+    4. Kiekvieno skirtingo konteinerio ir konteinerio dydžio vykdymo metu pateikiamos laiko ataskaitos, duomenys išvedami į failą.
+3. Jei parametrai neįvedami, programa pereina prie įprastinės veiklos.
+    1. Pasirinkus įprastinę tvarką leidžiama pasirinkti, ar norima generuoti duomenis.
+    2. Vėliau leidžiama pasirinkti, ar vartotojas nori įvedimą daryti iš failo. 
+    3. Baigus ar nepasirinkus įvedimą iš failo taip pat galima pasirinkti ir įvedimą rankiniui būdu. Įvedus vardą, pavardę, duodama pasirinkti pažymių įvedimo būdą (generacija, įvedimas rankiniu būdu).
+    4. Suvedus visus duomenis vartotojo paklausiama, ar jis nori pridėti dar vieną studentą. Jei taip, kartojami žingsniai 7-8.
+    5. Jei ne, vartotojo paklausiama, ar jis nori išvestį išskirti į du failus.
+    6. Pasirinkus taip, išvestis pateikiama dvejuose failuose, pagal pasirinkimą rodomas galutinis pažymys paskaičiuotas su vidurkiu arba mediana.
+    7. Jei ne, išvestis vykdoma komandinėje eilutėje ir taip pat pagal pasirinkimą rodomas galutinis pažymys paskaičiuotas su vidurkiu arba mediana.
+    8. Pagal atitinkamą vartotojo pasirinkimą parodoma lentelė komandinėje eilutėje arba pateikiama išvestis.
 
-## Programos spartos įvertinimas
+## Spartos įvertinimas
 
+Kompiuterio parametrai: 
+CPU: AMD Ryzen 5-3550H, 2.1GHz Quad-core.
+RAM: 16GB DDR4 2333MHz RAM.
+SSD: NVMe SSD.
+
+### Programos spartos įvertinimas iš pradžių taikyta strategija (dviejų konteinerių)
 
 | **Vector**                            | 1 000    | 10 000 | 100 000 | 1 000 000 | 10 000 000 |
 | ------------------------------------- | -------- | ------ | ------- | --------- | ---------- |
@@ -61,9 +85,7 @@ Naudojimas
 | Išrūšiavimas                          | 0.001s   | 0.015s | 0.254s  |  3.320s   |  44.200s   |
 | Išvedimas                             | 0.020s   | 0.037s | 0.230s  |  2.090s   |  19.883s   |
 
-AMD Ryzen 5-3550H, 2.1GHz Quad-core, 16GB DDR4 2333MHz RAM, NVMe SSD.
-
-## Programoje esančių dviejų strategijų spartos tikrinimas
+### Programoje esančių dviejų strategijų spartos tikrinimas
 
 | ***Vector***             | 1 000   | 10 000  | 100 000   | 1 000 000  | 10 000 000   |
 | ------------------------ | ------- | ------- | --------- | ---------- | ------------ |
@@ -104,15 +126,15 @@ AMD Ryzen 5-3550H, 2.1GHz Quad-core, 16GB DDR4 2333MHz RAM, NVMe SSD.
 | **Laiko naudojimas**     |         |         |           |            |              |
 |                          |         |         |           |            |              |
 | Vieno konteinerio        | 0.0015s | 0.022s  | 0.255s    | 3.568s     |  59.181s     |
-| Dviejų konteinerių       | 0.0011s | 0.011s  | 0.139s    | 1.468s     |  18.419s     |
-| Skirtumas                | 0.0004s | 0.011s  | 0.116s    | 2.100s     |  40.762s     |
+| Dviejų konteinerių       | 0.0011s | 0.011s  | 0.139s    | 1.468s     |  38.419s     |
+| Skirtumas                | 0.0004s | 0.011s  | 0.116s    | 2.100s     |  20.762s     |
 
 **IŠVADA**: Vieno konteinerio metodas yra brangesnis laiko atžvilgiu, tačiau sunaudoja *žymiai* mažiau atminties. Atsižvelgus į poreikius vienas algoritmas už kitą pranašesnis.
 
 Vieno konteinerio metodas išlošia tada, kai laikas nėra svarbu, o atmintis - ribota.
 Dviejų konteinerių metodas išlošia priešingu atveju - kai laikas svarbu ir atmintis - nėra ribota.
 
-## Po std::stable_partition optimizacijos metodo pritaikymo vykdytas spartos tikrinimas
+### Po std::partition optimizacijos metodo pritaikymo vykdytas spartos tikrinimas
 
 *Jei prie skirtumo parašyta +, tai reiškia, jog pritaikytas optimizacijos metodas naudojo papildomai resursų.*
 *Jei prie skirtumo parašyta -, tai reiškia, jog pritaikytas optimizacijos metodas naudojo mažiau resursų.*
@@ -121,39 +143,39 @@ Dviejų konteinerių metodas išlošia priešingu atveju - kai laikas svarbu ir 
 | ------------------------------------------------ | ---------- | -------- | --------- | ----------- | ------------ |
 | **Atminties naudojimas**                         |            |          |           |             |              |
 |                                                  |            |          |           |             |              |
-| Taikant stable_partition                         |  0.109MB   | 0.625MB  |  6.242MB  |  62.324MB   |   623.113MB  |
-| Skirtumas palyginus su vieno konteinerio metodu  | +0.016MB   | +0.489MB | -2.302MB  | -25.432MB   |  -215.649MB  |
+| Taikant std::partition                           |  0.046MB   | 0.449MB  |  4.472MB  |  44.359MB   |   443.621MB  |
+| Skirtumas palyginus su vieno konteinerio metodu  | -0.047MB   | +0.313MB | -4.072MB  | -39.397MB   |  -385.141MB  |
 |                                                  |            |          |           |             |              |
 | **Laiko naudojimas**                             |            |          |           |             |              |
 |                                                  |            |          |           |             |              |
-| Taikant stable_partition                         | 0.001s     | 0.032s   | 0.281s    | 3.513s      |  43.847s     |
-| Skirtumas palyginus su dviejų konteinerių metodu | 0.000s     | 0.000s   | -0.021s   | -0.405s     |  -0.129s     |
+| Taikant std::partition                           | 0.001s     | 0.019s   | 0.223s    | 2.851s      |  30.798s     |
+| Skirtumas palyginus su dviejų konteinerių metodu | 0.000s     | -0.013s  | -0.079s   | -1.067s     |  -13.178s    |
 
 | ***Deque***                                      | 1 000      | 10 000   | 100 000   | 1 000 000   | 10 000 000   |
 | ------------------------------------------------ | ---------- | -------- | --------- | ----------- | ------------ |
 | **Atminties naudojimas**                         |            |          |           |             |              |
 |                                                  |            |          |           |             |              |
-| Taikant stable_partition                         | 0.500MB    | 0.515MB  |  5.895MB  |  39.382MB   |    43.328MB  |
-| Skirtumas palyginus su vieno konteinerio metodu  | +0.379MB   | -0.11MB  | -4.851MB  | -48.961MB   |  -829.703MB  |
+| Taikant std::partition                           | 0.562MB    | 0.515MB  |  5.895MB  |  39.382MB   |   543.328MB  |
+| Skirtumas palyginus su vieno konteinerio metodu  | +0.441MB   | -0.110MB | -4.851MB  | -48.961MB   |  -329.703MB  |
 |                                                  |            |          |           |             |              |
 | **Laiko naudojimas**                             |            |          |           |             |              |
 |                                                  |            |          |           |             |              |
-| Taikant stable_partition                         | 0.0029s    | 0.050s   | 0.368s    | 5.513s      |  67.559s     |
-| Skirtumas palyginus su dviejų konteinerių metodu | +0.006s    | +0.007s  | -0.285s   | -0.156s     |  -11.706s    |
+| Taikant std::partition                           | 0.001s     | 0.050s   | 0.368s    | 5.513s      |  67.559s     |
+| Skirtumas palyginus su dviejų konteinerių metodu | -0.001s    | +0.007s  | -0.285s   | -0.156s     |  -4.912s    |
 
 | ***List***                                       | 1 000      | 10 000   | 100 000   | 1 000 000   | 10 000 000   |
 | ------------------------------------------------ | ---------- | -------- | --------- | ----------- | ------------ |
 | **Atminties naudojimas**                         |            |          |           |             |              |
 |                                                  |            |          |           |             |              |
-| Taikant stable_partition                         | 0.121MB    | 0.750MB  | 12.371MB  |  20.433MB   |    65.132MB  |
-| Skirtumas palyginus su vieno konteinerio metodu  | +0.020MB   | +0.031MB | +1.832MB  | -78.875MB   |  -912.293MB  |
+| Taikant std::partition                           | 0.121MB    | 0.750MB  | 12.371MB  |  50.433MB   |   565.132MB  |
+| Skirtumas palyginus su vieno konteinerio metodu  | +0.020MB   | +0.031MB | +1.832MB  | -48.875MB   |  -412.293MB  |
 |                                                  |            |          |           |             |              |
 | **Laiko naudojimas**                             |            |          |           |             |              |
 |                                                  |            |          |           |             |              |
-| Taikant stable_partition                         | 0.00008s   |  0.009s  |   0.126s  |    1.319s   |     14.409s  |
+| Taikant std::partition                           | 0.00008s   |  0.009s  |   0.126s  |    1.319s   |     34.409s  |
 | Skirtumas palyginus su dviejų konteinerių metodu | -0.00102s  |  -0.002s |   -0.013s |    -0.149s  |     -4.01s   |
 
-**IŠVADA**: std::stable_partition iš esmės programai suteikė spartą, kuri buvo gaunama naudojant du konteinerius ir suteikė tą patį atminties optimizuotumą, kaip ir vieno konteinerio metodas. Kai kuriais atvejais efektyvumas padidėjo netgi drastiškai, nes implementaicja pakeista iš template funkcijos, iteruojančios pro visą konteinerį, kuri buvo tam tikrais atvejais neefektyvi.
+**IŠVADA**: std::partition iš esmės programai suteikė spartą, kuri buvo gaunama naudojant du konteinerius ir suteikė tą patį atminties optimizuotumą, kaip ir vieno konteinerio metodas. Kai kuriais atvejais efektyvumas padidėjo netgi drastiškai, nes implementaicja pakeista iš template funkcijos, iteruojančios pro visą konteinerį, kuri buvo tam tikrais atvejais neefektyvi.
 	
 ## Versijos
 * [v0.1](https://github.com/gustaz/Pazymys-skaiciuokle/releases/tag/v0.1) Įgyvendintas esminis funkcionalumas
@@ -164,3 +186,4 @@ Dviejų konteinerių metodas išlošia priešingu atveju - kai laikas svarbu ir 
 * [v0.4.2](https://github.com/gustaz/Pazymys-skaiciuokle/releases/tag/v0.4.2) Pridėtas spartos tikrinimo kelias,  kodo refaktorizacija ir optimizavimas.
 * [v0.5](https://github.com/gustaz/Pazymys-skaiciuokle/releases/tag/v0.5) Pridėtas funkcionalumas su deque ir list, perėjimas prie template funkcijų, pridėti paleidimo argumentai.
 * [v1.0.1](https://github.com/gustaz/Pazymys-skaiciuokle/releases/tag/v1.0.1) Pridėtas dviejų algoritmų tikrinimas lyginant jų atminties ir laiko sąnaudas. Dėl atminties tikrinimo algoritmo, ši versija tinka tik Windows operacinę sistemą naudojantiems vartotojams.
+* [v1.0.2](https://github.com/gustaz/Pazymys-skaiciuokle/releases/tag/v1.0.2) Programos optimizavimas taikant std::partition, įvairių spartos įvertinimų papildymas į .README, optimizacija, aptvarkymas, sugrįžimas prie daugiaplatformio suderinamumo ir kelių makefile sukūrimas.
